@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: spring-boot-rest-demo
+server:
+  servlet:
+    context-path: /api/v1
