@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver # optional --> can be automatically detected by Spring
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
