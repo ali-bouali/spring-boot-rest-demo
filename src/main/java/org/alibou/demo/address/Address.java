@@ -1,7 +1,5 @@
 package org.alibou.demo.address;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,7 +27,6 @@ public class Address {
     private String city;
 
     @OneToOne
-    @JsonBackReference
     private Student student;
 
 }
