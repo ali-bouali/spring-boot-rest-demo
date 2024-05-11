@@ -53,7 +53,7 @@ public class Student {
     @Column(length = 100,nullable = false)
     @NotNull(message = "The lastname should not be null")
     private String lastname;
-    @OneToOne//(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne
     private Address address;
     @ManyToMany
     @JoinTable(

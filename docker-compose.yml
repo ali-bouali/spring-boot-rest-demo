@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: e_learning
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: username
+      POSTGRES_DB: e_learning
+    ports:
+      - "5433:5432"
+    networks:
+      - localNet
+
+networks:
+  localNet:
+    driver: bridge
+
