@@ -1,19 +1,20 @@
 package org.alibou.demo.student;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import jakarta.persistence.TableGenerator;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.alibou.demo.address.Address;
+import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 @Setter
@@ -21,19 +22,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "ECD_IJK_STD")
-public class Student { // ECD_IJK_STD
+public class Student {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.TABLE,
-            generator = "tbl"
-    )
-    @TableGenerator(
-            name = "tbl",
-            initialValue = 1,
-            allocationSize = 1
-    )
+    @GeneratedValue
     private Integer id;
     @Column(updatable = false, nullable = false, unique = true)
     private String username;
@@ -42,4 +34,27 @@ public class Student { // ECD_IJK_STD
     @Column(length = 1000)
     private String firstname;
     private String lastname;
+
+    @OneToOne
+    @JsonManagedReference
+    private Address address;
+
+    // @Transactional
+    /**
+     * Just create an object that holds the information
+     * and return the object.
+     * @Transactional is mandatory when we need to fetch
+     * sub data (expl: Address) when the fetch type is LAZY
+     */
+    void test() {
+        Student s = new Student(); // from DB
+        // return s;
+        /*
+
+        StudentResponse res = new StudentResponse();
+        // set values
+        res.setFirstname(s.getFirstname());
+         */
+
+    }
 }
