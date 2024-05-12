@@ -23,13 +23,14 @@ import org.alibou.demo.subject.Subject;
 @NoArgsConstructor
 @Builder
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "content_type", discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.JOINED)
+// @DiscriminatorColumn(name = "content_type", discriminatorType = DiscriminatorType.STRING)
 public class Content {
 
     @Id
     @GeneratedValue
     private  Integer id;
+    private String description;
 
     @ManyToOne()
     @JoinColumn(name = "chapter_id")

@@ -4,8 +4,9 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("F")
+// @DiscriminatorValue("F")
 public class File extends Content {
 
     private String fileUrl;
+    // 12 attr
 }

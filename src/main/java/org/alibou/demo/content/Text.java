@@ -4,8 +4,9 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("T")
+// @DiscriminatorValue("T")
 public class Text extends Content {
 
     private String text;
+    // 20 attr
 }

@@ -4,8 +4,9 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("V")
+// @DiscriminatorValue("V")
 public class Video extends Content {
 
     private String url;
+    // 10 attr
 }
