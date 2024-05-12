@@ -1,6 +1,7 @@
 package org.alibou.demo.address;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,12 +10,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.alibou.demo.student.Student;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
   @Id
   @SequenceGenerator(
@@ -23,31 +29,28 @@ public class Address {
       allocationSize = 1
   )
   @GeneratedValue(
-      generator = "address_sequence",
+      generator = "address_sequence ",
       strategy = GenerationType.SEQUENCE)
   private Long id;
 
   @Column(nullable = false)
-  @NotNull(message="The street should not be null")
+
   private String street;
 
   @Column(nullable = false)
-  @NotNull(message="The city should not be null")
-  private String city;
+    private String city;
 
   @Column(nullable = false)
-  @NotNull(message="The state should not be null")
-  private String state;
+   private String state;
 
   @Column(nullable = false)
-  @NotNull(message="The country should not be null")
-  private String country;
+    private String country;
 
   @Column(nullable = false)
-  @NotNull(message="The postalCode should not be null")
   private String postalCode;
-  @JsonIgnore
   @OneToOne(mappedBy = "address")
+  @JsonBackReference
+  //@JsonIgnore
   private Student student;
 
 

@@ -1,5 +1,6 @@
 package org.alibou.demo.student;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,13 +16,20 @@ import jakarta.validation.constraints.NotNull ;
 import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.alibou.demo.address.Address;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import org.alibou.demo.subject.Subject;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "students", uniqueConstraints = {
     @UniqueConstraint(name = "students_email", columnNames = "email"),
@@ -40,20 +48,17 @@ public class Student {
         strategy = GenerationType.SEQUENCE)
     private Integer id;
     @Column(updatable = false, nullable = false, length = 500)
-    @NotNull(message = "The username should not be null")
-    @Size(min = 3, max = 50)
+
     private String username;
     @Column(nullable = false)
-    @NotNull(message = "The email should not be null")
-    @Email
-    private String email;
+     private String email;
 
     @Column(length = 100)
     private String firstname;
     @Column(length = 100,nullable = false)
-    @NotNull(message = "The lastname should not be null")
-    private String lastname;
+     private String lastname;
     @OneToOne
+    @JsonManagedReference
     private Address address;
     @ManyToMany
     @JoinTable(

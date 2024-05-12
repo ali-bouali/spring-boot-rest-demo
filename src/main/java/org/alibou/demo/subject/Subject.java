@@ -15,7 +15,11 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.alibou.demo.chapter.Chapter;
 import org.alibou.demo.student.Student;
 import org.alibou.demo.teacher.Teacher;
@@ -25,7 +29,10 @@ import org.alibou.demo.teacher.Teacher;
 
 })
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Subject {
   @Id
   @SequenceGenerator(
@@ -38,7 +45,6 @@ public class Subject {
       strategy = GenerationType.SEQUENCE)
   private Long id;
   @Column(nullable=false)
-  @NotNull(message="The name should not be null")
   private String name;
   private String description;
   @ManyToMany(mappedBy = "subjects")

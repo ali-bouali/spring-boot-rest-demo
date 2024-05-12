@@ -35,7 +35,6 @@ public class Teacher {
   @NotNull(message="The name should not be null")
   private String name;
 
-  // A teacher can teach only one subject
   @ManyToOne
   @JoinColumn(name = "subject_id")
   private Subject subject;
