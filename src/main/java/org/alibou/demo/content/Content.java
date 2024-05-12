@@ -23,7 +23,7 @@ import org.alibou.demo.subject.Subject;
 @NoArgsConstructor
 @Builder
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 // @DiscriminatorColumn(name = "content_type", discriminatorType = DiscriminatorType.STRING)
 public class Content {
 
