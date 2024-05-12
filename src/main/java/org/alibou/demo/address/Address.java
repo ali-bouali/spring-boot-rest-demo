@@ -2,7 +2,6 @@ package org.alibou.demo.address;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.student.Student;
 
 @Entity
@@ -21,7 +22,9 @@ import org.alibou.demo.student.Student;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address {
+@SuperBuilder
+public class Address  extends BaseEntity {
+
   @Id
   @SequenceGenerator(
       name = "address_sequence",
@@ -29,7 +32,7 @@ public class Address {
       allocationSize = 1
   )
   @GeneratedValue(
-      generator = "address_sequence ",
+      generator = "address_sequence",
       strategy = GenerationType.SEQUENCE)
   private Long id;
 
@@ -38,13 +41,13 @@ public class Address {
   private String street;
 
   @Column(nullable = false)
-    private String city;
+  private String city;
 
   @Column(nullable = false)
-   private String state;
+  private String state;
 
   @Column(nullable = false)
-    private String country;
+  private String country;
 
   @Column(nullable = false)
   private String postalCode;
@@ -52,7 +55,6 @@ public class Address {
   @JsonBackReference
   //@JsonIgnore
   private Student student;
-
 
 
 }

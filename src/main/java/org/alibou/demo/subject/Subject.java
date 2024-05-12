@@ -6,21 +6,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.alibou.demo.chapter.Chapter;
+import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.student.Student;
 import org.alibou.demo.teacher.Teacher;
 
@@ -33,7 +33,9 @@ import org.alibou.demo.teacher.Teacher;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Subject {
+@SuperBuilder
+public class Subject extends BaseEntity {
+
   @Id
   @SequenceGenerator(
       name = "subject_sequence",
@@ -44,10 +46,15 @@ public class Subject {
       generator = "subject_sequence",
       strategy = GenerationType.SEQUENCE)
   private Long id;
-  @Column(nullable=false)
+  @Column(nullable = false)
   private String name;
   private String description;
-  @ManyToMany(mappedBy = "subjects")
+  @ManyToMany
+  @JoinTable(
+      name = "subscription",
+      joinColumns = @JoinColumn(name = "subject_id"),
+      inverseJoinColumns = @JoinColumn(name = "student_id")
+  )
   private Set<Student> students = new HashSet<>();
   @OneToMany(mappedBy = "subject")
   private Set<Teacher> teachers = new HashSet<>();

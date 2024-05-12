@@ -12,14 +12,19 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
+import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.subject.Subject;
+
 @Data
 @Entity
 @Table(name = "teachers", uniqueConstraints = {
     @UniqueConstraint(name = "teachers_name", columnNames = "name")
 
 })
-public class Teacher {
+@SuperBuilder
+public class Teacher extends BaseEntity {
+
   @Id
   @SequenceGenerator(
       name = "teacher_sequence",
@@ -32,7 +37,7 @@ public class Teacher {
   private Long id;
 
   @Column(nullable = false)
-  @NotNull(message="The name should not be null")
+  @NotNull(message = "The name should not be null")
   private String name;
 
   @ManyToOne
