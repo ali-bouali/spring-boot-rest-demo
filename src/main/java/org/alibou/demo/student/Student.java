@@ -1,10 +1,12 @@
 package org.alibou.demo.student;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +14,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.alibou.demo.address.Address;
+import org.alibou.demo.subject.Subject;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,17 +37,9 @@ public class Student {
     private String firstname;
     private String lastname;
 
-    @OneToOne(mappedBy = "student", cascade = {CascadeType.MERGE})
+    @OneToOne(mappedBy = "student")
     private Address address;
 
-    void test() {
-        Student s = new Student();
-        // student info
-        Address adr = new Address();
-        adr.setId(1); // optional
-        adr.setCity("sdsds");
-        adr.setStudent(s);
-        // adr info
-        s.setAddress(adr);
-    }
+    @ManyToMany(mappedBy = "students")
+    private List<Subject> subjects;
 }
