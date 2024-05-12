@@ -1,30 +1,29 @@
 package org.alibou.demo.address;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.student.Student;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
-public class Address {
+public class Address extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private Integer id;
     private String street;
     private String houseNumber;
     private String city;
+    @Embedded
+    private ZipCode zipCode;
 
     @OneToOne
     private Student student;

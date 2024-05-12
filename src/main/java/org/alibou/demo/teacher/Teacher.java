@@ -1,28 +1,24 @@
 package org.alibou.demo.teacher;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.subject.Subject;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
-public class Teacher {
+public class Teacher extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private  Integer id;
 
     @ManyToOne()
     @JoinColumn(name = "subject_id")

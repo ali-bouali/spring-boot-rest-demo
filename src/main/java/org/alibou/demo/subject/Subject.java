@@ -1,18 +1,17 @@
 package org.alibou.demo.subject;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.alibou.demo.chapter.Chapter;
+import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.student.Student;
 import org.alibou.demo.teacher.Teacher;
 
@@ -22,13 +21,11 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
-public class Subject {
+public class Subject extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private  Integer id;
+
 
     @OneToMany(mappedBy = "subject")
     private List<Teacher> teachers;
