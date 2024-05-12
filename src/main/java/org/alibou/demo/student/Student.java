@@ -1,5 +1,6 @@
 package org.alibou.demo.student;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,17 @@ public class Student {
     private String firstname;
     private String lastname;
 
-    @OneToOne(mappedBy = "student")
+    @OneToOne(mappedBy = "student", cascade = {CascadeType.MERGE})
     private Address address;
+
+    void test() {
+        Student s = new Student();
+        // student info
+        Address adr = new Address();
+        adr.setId(1); // optional
+        adr.setCity("sdsds");
+        adr.setStudent(s);
+        // adr info
+        s.setAddress(adr);
+    }
 }
