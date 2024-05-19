@@ -32,7 +32,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
 
     /**
-     *
+     * use projection to customise the response objects
      * @return
      */
     @Query(value = """
@@ -49,5 +49,5 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             inner join Teacher t
             where s.firstname = :param
             """)
-    List<StudentSubjectResponseProjection> findByProjection();
+    List<StudentSubjectResponseProjection> findByProjection(String param);
 }
