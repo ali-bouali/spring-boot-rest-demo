@@ -19,6 +19,9 @@ import org.alibou.demo.subject.Subject;
 @Entity
 public class Teacher extends BaseEntity {
 
+    private String firstname;
+    private String lastname;
+
 
     @ManyToOne()
     @JoinColumn(name = "subject_id")

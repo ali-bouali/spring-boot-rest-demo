@@ -26,6 +26,8 @@ import java.util.List;
 public class Subject extends BaseEntity {
 
 
+    private String name;
+    private String description;
 
     @OneToMany(mappedBy = "subject")
     private List<Teacher> teachers;

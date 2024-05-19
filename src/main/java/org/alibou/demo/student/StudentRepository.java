@@ -22,4 +22,32 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     List<Student> findBySubjectsTeachersId(Integer id);
 
     List<Student> findBySubjectsTeachersIdOrderByEmailDesc(Integer id);
+
+
+    @Query(value = """
+            select * from student s
+            where s.firstname = :param
+            """, nativeQuery = true)
+    List<Student> findByComplexQuery();
+
+
+    /**
+     *
+     * @return
+     */
+    @Query(value = """
+            select
+            s.firstname as studentFn,
+            s.lastname as studentLn,
+            sb.name as SubName,
+            sb.description as SubDesc,
+            t.firstname as teacherFn,
+            t.lastname as teacherLn
+            
+            from Student s
+            inner join Subject sb
+            inner join Teacher t
+            where s.firstname = :param
+            """)
+    List<StudentSubjectResponseProjection> findByProjection();
 }
