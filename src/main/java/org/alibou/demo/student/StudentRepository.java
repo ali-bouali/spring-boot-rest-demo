@@ -1,14 +1,19 @@
 package org.alibou.demo.student;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentRepository extends JpaRepository<Student, Integer> {
+public interface StudentRepository extends JpaRepository<Student, Integer>, JpaSpecificationExecutor<Student> {
 
 
     @Query("update Student set firstname = concat(firstname, '-', :s)")
@@ -50,4 +55,12 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             where s.firstname = :param
             """)
     List<StudentSubjectResponseProjection> findByProjection(String param);
+
+
+
+    /*----------------------------------*/
+
+
+    Page<Student> findAlByCreatedAt(LocalDateTime ca, Pageable pageable);
+
 }
