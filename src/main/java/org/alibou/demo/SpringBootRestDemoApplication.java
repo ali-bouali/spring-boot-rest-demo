@@ -1,33 +1,47 @@
 package org.alibou.demo;
 
-import java.util.stream.Collectors;
+import org.alibou.demo.student.StudentRepository;
+import org.alibou.demo.student.StudentService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import  org.alibou.demo.student.StudentRepository;
+
 @SpringBootApplication
 public class SpringBootRestDemoApplication {
-  private final StudentRepository repo;  // Dependency declaration
 
-  public SpringBootRestDemoApplication(StudentRepository repo) {
+  private final StudentRepository repo;  // Dependency declaration
+  private final StudentService studentService;
+
+  public SpringBootRestDemoApplication(StudentRepository repo, StudentService studentService) {
     this.repo = repo;  // Constructor injection
+    this.studentService = studentService;
   }
 
   public static void main(String[] args) {
     SpringApplication.run(SpringBootRestDemoApplication.class, args);
 
 
-
-
   }
+
   @Bean
   public CommandLineRunner commandLineRunner() {
-      return args -> {
-      repo.findBySubjectsName("Mathematics");
-        System.out.println("\n here"+repo.findByEmailContainingIgnoreCase("M").stream().map(student -> student.getFirstname()).collect(
-            Collectors.toSet()));
-        repo.findByLastnameAndFirstname("tt","tt");
+    return args -> {
+      //studentService.updateAllStudents();
+  studentService.findStudentByFirstnameContainingIgnoreCase("John").getFirstname() .toString();
+     studentService.printStudentDetails("John");
+      studentService.findBySubjectsTeachersId(1);
+      var page = studentService.findAll(0, 3);
+      System.out.println(page.toString());
+      System.out.println("Total Elements: " + page.getTotalElements());
+      System.out.println("Total Pages: " + page.getTotalPages());
+      page.getContent().forEach(student -> {
+        System.out.println("First Name: " + student.getFirstname());
+        System.out.println("Last Name: " + student.getLastname());
+        System.out.println("Username: " + student.getUsername());
+        System.out.println("Email: " + student.getEmail());
+        System.out.println("-----");
+      });
 
     };
   }

@@ -17,11 +17,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.alibou.demo.address.Address;
 import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.subject.Subject;
-
+@ToString
 @Getter
 @Setter
 @AllArgsConstructor

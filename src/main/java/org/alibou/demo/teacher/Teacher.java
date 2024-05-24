@@ -11,7 +11,10 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.subject.Subject;
@@ -23,6 +26,8 @@ import org.alibou.demo.subject.Subject;
 
 })
 @SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Teacher extends BaseEntity {
 
   @Id
@@ -37,8 +42,9 @@ public class Teacher extends BaseEntity {
   private Long id;
 
   @Column(nullable = false)
-  @NotNull(message = "The name should not be null")
-  private String name;
+   private String firstname;
+  @Column(length = 100, nullable = false)
+  private String lastname;
 
   @ManyToOne
   @JoinColumn(name = "subject_id")
