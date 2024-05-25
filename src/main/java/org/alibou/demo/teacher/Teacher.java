@@ -19,6 +19,7 @@ import org.alibou.demo.subject.Subject;
 @Entity
 public class Teacher extends BaseEntity {
 
+    // 1000-1999
     private String firstname;
     private String lastname;
 

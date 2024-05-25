@@ -13,6 +13,7 @@ import org.alibou.demo.address.Address;
 import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.subject.Subject;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -27,6 +28,8 @@ public class Student  extends BaseEntity {
     @Column(updatable = false, nullable = false, unique = true)
     private String username;
     private String email;
+    private LocalDate dateOfBirth;
+    private String level;
 
     @Column(length = 1000)
     private String firstname;

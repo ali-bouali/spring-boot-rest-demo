@@ -1,6 +1,9 @@
 package org.alibou.demo.student;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.alibou.demo.student.dto.StudentRequest;
+import org.alibou.demo.student.dto.StudentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.alibou.demo.student.StudentSpecification.withCreatedAt;
 import static org.alibou.demo.student.StudentSpecification.withEmail;
@@ -23,6 +25,16 @@ import static org.alibou.demo.student.StudentSpecification.withLastname;
 public class StudentService {
 
     private final StudentRepository repository;
+
+
+    public void createStudent(StudentRequest request) {
+
+    }
+
+    public Student findById(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("12"));
+    }
 
     @Transactional
     public void updateAllStudents() {
