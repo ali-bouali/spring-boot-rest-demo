@@ -22,8 +22,8 @@ public class SpringBootRestDemoApplication {
             StudentService service
     ) {
         return args -> {
-            var s = service.findAll(0, 3);
-            System.out.println(s.toString());
+            // var s = service.findAll(0, 3);
+            // System.out.println(s.toString());
         };
     }
 }

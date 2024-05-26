@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
 
     // grouping the exceptions
-    @ExceptionHandler({RuntimeException.class, Exception.class, ArithmeticException.class})
+    // @ExceptionHandler({RuntimeException.class, Exception.class, ArithmeticException.class})
     public ResponseEntity<?> handleException() {
 
         return ResponseEntity

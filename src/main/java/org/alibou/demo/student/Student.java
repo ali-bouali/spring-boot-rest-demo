@@ -24,7 +24,6 @@ import java.util.List;
 @Entity
 public class Student  extends BaseEntity {
 
-
     @Column(updatable = false, nullable = false, unique = true)
     private String username;
     private String email;

@@ -1,6 +1,7 @@
 package org.alibou.demo.student;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.alibou.demo.student.dto.StudentLightRequest;
 import org.alibou.demo.student.dto.StudentLightResponse;
 import org.alibou.demo.student.dto.StudentRequest;
@@ -14,17 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/students")
+@RequiredArgsConstructor
 public class StudentController {
 
+    private final StudentService service;
 
     @PostMapping
     public ResponseEntity<?> createStudent(
             @RequestBody @Valid StudentRequest student
     ) {
-        return null;
+        this.service.createStudent(student);
+        return ResponseEntity.accepted().body("success");
     }
 
-    @PostMapping
+    // @PostMapping
     // with special access
     public ResponseEntity<?> createStudentWithLessInformation(
             @RequestBody StudentLightRequest student
@@ -32,13 +36,13 @@ public class StudentController {
         return null;
     }
 
-    @GetMapping
+    //@GetMapping
     // Admin access
     public ResponseEntity<StudentResponse> findById() {
         return null;
     }
 
-    @GetMapping
+    //@GetMapping
     // All access
     public ResponseEntity<StudentLightResponse> findLightStudentById() {
         return null;

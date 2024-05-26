@@ -9,7 +9,7 @@ import org.alibou.demo.address.AddressRequest;
 import java.util.List;
 
 public record StudentRequest(
-
+        Integer id,
         String firstname,
         String lastname,
         @NotNull(message = "1")
@@ -19,7 +19,8 @@ public record StudentRequest(
         @NotNull(message = "4")
         @NotEmpty(message = "4")
         String email,
-        AddressRequest address
+        Integer addressId,
+        List<Integer> subjectIds
         /*,
         @NotBlank
         String ss, // "" --> false | " " --> false
