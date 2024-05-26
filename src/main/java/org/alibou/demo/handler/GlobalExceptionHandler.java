@@ -1,6 +1,8 @@
 package org.alibou.demo.handler;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.alibou.demo.exception.BusinessException;
+import org.alibou.demo.exception.ExceptionType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -23,6 +25,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body("123");
+    }
+
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<?> handleException(BusinessException exp) {
+
+        Map<String, Object> errors = new HashMap<>();
+        errors.put("ErrorCode", exp.getExceptionType().getCode());
+        errors.put("ErrorDesc", exp.getExceptionType().getDesc());
+
+        if (exp.getExceptionType() == ExceptionType.PAYMENT_EXCEPTION) {
+            handlePaymentException(exp);
+        }
+
+        return ResponseEntity
+                .status(exp.getStatus())
+                .body(errors);
+    }
+
+    private void handlePaymentException(BusinessException exp) {
+
     }
 
     @ExceptionHandler({EntityNotFoundException.class})

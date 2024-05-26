@@ -2,6 +2,9 @@ package org.alibou.demo.student;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.alibou.demo.exception.BusinessException;
+import org.alibou.demo.exception.ExceptionType;
+import org.alibou.demo.exception.SubjectMaxLimitExceeded;
 import org.alibou.demo.student.dto.StudentRequest;
 import org.alibou.demo.student.dto.StudentResponse;
 import org.alibou.demo.subject.Subject;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.alibou.demo.exception.ExceptionType.SUBJECT_LIMIT_EXCEEDED;
 import static org.alibou.demo.student.StudentSpecification.withCreatedAt;
 import static org.alibou.demo.student.StudentSpecification.withEmail;
 import static org.alibou.demo.student.StudentSpecification.withFirstname;
@@ -53,7 +58,13 @@ public class StudentService {
         List<Subject> availableSubjects = subjectRepository.findAllById(request.subjectIds());
         if (availableSubjects.size() != request.subjectIds().size()) {
             throw new EntityNotFoundException("Not all the subjects are available...");
+            // throw new BusinessException(ELEMENT_NOT__FOUND_IN_DB, NOT_FOUND);
         }
+
+        // todo implement the logic for max capacity for subject
+        // max capacity should not block the insertion --> najmou ninserou student f subjects elli mezelou yarf3ou
+        // throw new SubjectMaxLimitExceeded("Max subject capaycity ex", 20);
+        // throw new BusinessException(SUBJECT_LIMIT_EXCEEDED, HttpStatus.NOT_FOUND);
 
         for(Subject sub: availableSubjects) {
             List<Student> students = new ArrayList<>();

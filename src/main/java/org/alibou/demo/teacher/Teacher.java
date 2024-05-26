@@ -22,6 +22,7 @@ public class Teacher extends BaseEntity {
     // 1000-1999
     private String firstname;
     private String lastname;
+    private String speciality; // supposons ennou speciality marbout wella t7added l subject elli ynajm y9arrih l teacher
 
 
     @ManyToOne()
