@@ -3,13 +3,16 @@ package org.alibou.demo.student;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+@EnableJpaAuditing
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Integer> {
+public interface StudentRepository extends JpaRepository<Student, Integer> ,
+    JpaSpecificationExecutor<Student> {
 
   //1. Find by a Single Property
   Optional<Student> findByUsernameIgnoreCase(String username);
@@ -55,10 +58,10 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
   void updateAllStudents(@Param(value = "s") String suffix);
   Optional<Student> findTop1StudentByFirstnameContainingIgnoreCase(String s);
   List<Student> findStudentByLastnameContainingIgnoreCase(String lastname);
-  @Query(value = """
-        select s from Student s
-        inner join  s.subjects subj
-        inner join subj.teachers t
-        where t.id = :teacherId
-        """)
+//  @Query(value = """
+//        select s from Student s
+//        inner join  s.subjects subj
+//        inner join subj.teachers t
+//        where t.id = :teacherId
+//        """)
   List<Student> findBySubjectsTeachersId(@Param("teacherId") Integer teacherId);}//ask ali

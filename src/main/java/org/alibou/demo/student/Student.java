@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -58,7 +60,14 @@ public class Student extends BaseEntity {
   @OneToOne
   @JsonManagedReference
   private Address address;
-  @ManyToMany(mappedBy = "students")
+
+
+  @ManyToMany
+  @JoinTable(
+    name = "subscription",
+    joinColumns = @JoinColumn(name = "student_id"),
+    inverseJoinColumns = @JoinColumn(name = "subject_id")
+  )
   private Set<Subject> subjects = new HashSet<>();
 
 }

@@ -45,21 +45,18 @@ public class Subject extends BaseEntity {
   @GeneratedValue(
       generator = "subject_sequence",
       strategy = GenerationType.SEQUENCE)
-  private Long id;
+  private Integer id;
   @Column(nullable = false)
   private String name;
+  private Integer capacity;
   private String description;
-  @ManyToMany
-  @JoinTable(
-      name = "subscription",
-      joinColumns = @JoinColumn(name = "subject_id"),
-      inverseJoinColumns = @JoinColumn(name = "student_id")
-  )
+  @ManyToMany(mappedBy = "subjects")
   private Set<Student> students = new HashSet<>();
   @OneToMany(mappedBy = "subject")
   private Set<Teacher> teachers = new HashSet<>();
   @OneToMany(mappedBy = "subject")
   private Set<Chapter> chapters = new HashSet<>();
+
 }
 
 

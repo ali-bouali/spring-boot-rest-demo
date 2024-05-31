@@ -50,4 +50,5 @@ public class Teacher extends BaseEntity {
   @JoinColumn(name = "subject_id")
   private Subject subject;
 
+
 }

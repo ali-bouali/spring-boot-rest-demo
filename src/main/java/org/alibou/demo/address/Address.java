@@ -34,7 +34,7 @@ public class Address  extends BaseEntity {
   @GeneratedValue(
       generator = "address_sequence",
       strategy = GenerationType.SEQUENCE)
-  private Long id;
+  private Integer id;
 
   @Column(nullable = false)
 

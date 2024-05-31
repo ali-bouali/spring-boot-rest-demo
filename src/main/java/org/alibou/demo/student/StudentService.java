@@ -1,22 +1,37 @@
 package org.alibou.demo.student;
-
+import org.alibou.demo.common.exception.SubjectMaxLimitExceeded;
+import org.alibou.demo.student.dto.StudentLightRequest;
+import org.alibou.demo.student.dto.StudentMapper;
+import org.alibou.demo.student.dto.StudentResponse;
+import org.alibou.demo.subject.SubjectRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.alibou.demo.address.AddressRepository;
+import org.alibou.demo.student.dto.StudentRequest;
+import org.alibou.demo.subject.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional; //askali
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import static org.alibou.demo.student.StudentSpecification.withEmail;
+import static org.alibou.demo.student.StudentSpecification.withFirstname;
+import static org.alibou.demo.student.StudentSpecification.withLastname;
 
 @Service
 @RequiredArgsConstructor
 public class StudentService {
 
   private final StudentRepository studentRepository;
-
+  private final AddressRepository addressRepository;
+  private final SubjectRepository subjectRepository ;
+  private final StudentMapper  mapper ;
   @Transactional
   public void updateAllStudents() {
     studentRepository.updateAllStudents("--");
@@ -93,4 +108,65 @@ public class StudentService {
     Page<Student> students = studentRepository.findAll(pageable);
     return students;
   }
+
+  @Transactional
+  public void createStudent(StudentRequest request) {
+    addressRepository.findById(request.addressId()).orElseThrow(() -> new EntityNotFoundException("The address is not find with id :" +request.addressId()));
+    List<Subject> allSubjects = subjectRepository.findAllById(request.subjectIds());
+    if (allSubjects.size() != request.subjectIds().size()) {
+      throw new EntityNotFoundException("Not all the subjects are available...");
+    }
+    List<Subject> availableSubjects = allSubjects.stream()
+      .peek(subject -> {
+        if (subject.getCapacity() <= 0) {
+          throw new SubjectMaxLimitExceeded("Subject with ID " + subject.getId() + " has exceeded its capacity.");
+        }
+        subject.setCapacity(subject.getCapacity() - 1);
+      })
+      .collect(Collectors.toList());
+
+
+
+    if (availableSubjects.size() != request.subjectIds().size()) {
+      throw new EntityNotFoundException("Not all the subjects are available...");
+          }
+
+    Student student = mapper.toStudent(request);
+    Student savedStudent = studentRepository.save(student);
+    subjectRepository.saveAll(availableSubjects) ;
+  }
+  @Transactional
+  public void createStudentWithLessInformation(StudentLightRequest request) {
+
+    Student student = mapper.toStudent(request);
+    Student savedStudent = studentRepository.save(student);
+  }
+
+
+  Optional<StudentResponse> findById (Integer id )
+  {
+    Student student =studentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("the student not found with id  :" +id));
+   return Optional.ofNullable( mapper.toStudentResponse(student));
+  }
+
+
+
+  public Page<StudentResponse> search(String fn, String ln, String email , int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    Specification<Student> mySpec = withEmail(email);
+    if (StringUtils.hasLength(fn)) {
+      mySpec = mySpec.or(withFirstname(fn));
+    }
+    if (StringUtils.hasLength(ln)) {
+      mySpec = mySpec.or(withLastname(ln));
+    }
+    Page<Student> students = studentRepository.findAll(
+      mySpec,
+      pageable
+    );
+    Page<StudentResponse> studentResponses = students.map(student -> mapper.toStudentResponse(student));
+
+    return studentResponses;
+  }
+
 }

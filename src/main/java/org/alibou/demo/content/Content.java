@@ -42,4 +42,5 @@ public class Content extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "chapter_id", nullable = false)
   private Chapter chapter;
+
 }
