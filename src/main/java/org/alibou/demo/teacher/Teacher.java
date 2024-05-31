@@ -39,7 +39,7 @@ public class Teacher extends BaseEntity {
   @GeneratedValue(
       generator = "teacher_sequence",
       strategy = GenerationType.SEQUENCE)
-  private Long id;
+  private Integer id;
 
   @Column(nullable = false)
    private String firstname;
