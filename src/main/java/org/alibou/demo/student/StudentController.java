@@ -7,6 +7,7 @@ import org.alibou.demo.student.dto.StudentLightResponse;
 import org.alibou.demo.student.dto.StudentRequest;
 import org.alibou.demo.student.dto.StudentResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ public class StudentController {
     private final StudentService service;
 
     @PostMapping
+    // @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createStudent(
             @RequestBody @Valid StudentRequest student
     ) {

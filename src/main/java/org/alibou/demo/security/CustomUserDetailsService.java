@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             ),
             new User(
                     "mohammed",
-                    "password",
+                    "$2a$12$py72QO1KHm/87Q6fUL9/uOh47w7HMIUJeaEYFiLzS0M/XM1NlYjou",
                     List.of(new SimpleGrantedAuthority("manager"))
             )
             , new User(

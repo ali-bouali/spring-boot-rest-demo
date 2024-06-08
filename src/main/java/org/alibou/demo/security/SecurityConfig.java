@@ -2,7 +2,9 @@ package org.alibou.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,8 +19,12 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     // @Bean
@@ -44,9 +50,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(
-                                "/students/**"
+                                "/public/**"
                                 )
-                                    .permitAll()
+                                .permitAll()
+                                .requestMatchers(POST, "students/**")
+                                    .hasRole("admin")
+                                .requestMatchers(GET, "students/**")
+                                    .hasAnyRole("manager", "admin")
                             .anyRequest()
                                 .authenticated()
                 )
