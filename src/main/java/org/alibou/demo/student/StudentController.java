@@ -28,6 +28,13 @@ public class StudentController {
         return ResponseEntity.accepted().body("success");
     }
 
+    // /search/by/name
+    // /search/by/age
+    // /search/by/admin/address --> n7ebbha tkoun accessible ken lel admin
+
+
+
+
     // @PostMapping
     // with special access
     public ResponseEntity<?> createStudentWithLessInformation(
@@ -36,10 +43,15 @@ public class StudentController {
         return null;
     }
 
-    //@GetMapping
+    @GetMapping
     // Admin access
     public ResponseEntity<StudentResponse> findById() {
-        return null;
+        StudentResponse std = StudentResponse.builder()
+                .firstname("sdfsdf")
+                .lastname("asasd")
+                .email("asasd")
+                .build();
+        return ResponseEntity.ok(std);
     }
 
     //@GetMapping
