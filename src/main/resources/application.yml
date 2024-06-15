@@ -19,6 +19,13 @@ spring:
 server:
   servlet:
     context-path: /api/v1
+
+application:
+  security:
+    jwt:
+      secret-key: 210D3D27605D0EE737952294265400A7CBA109746AFACD84B9CB0139BF6B7E3A
+      expiration: 86400000
+
 #logging:
 #  level:
 #    org.springframework: debug

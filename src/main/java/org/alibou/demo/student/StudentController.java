@@ -22,7 +22,6 @@ public class StudentController {
     private final StudentService service;
 
     @PostMapping
-    // @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createStudent(
             @RequestBody @Valid StudentRequest student
     ) {
