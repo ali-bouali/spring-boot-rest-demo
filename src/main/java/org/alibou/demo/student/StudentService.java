@@ -1,4 +1,5 @@
 package org.alibou.demo.student;
+import jakarta.persistence.EntityExistsException;
 import org.alibou.demo.common.exception.SubjectMaxLimitExceeded;
 import org.alibou.demo.student.dto.StudentLightRequest;
 import org.alibou.demo.student.dto.StudentMapper;
@@ -110,7 +111,13 @@ public class StudentService {
   }
 
   @Transactional
-  public void createStudent(StudentRequest request) {
+  public StudentResponse createStudent(StudentRequest request) {
+    Boolean existuser = studentRepository.existsByEmailOrUsername(request.email(), request.username());
+    System.out.println("\n la variable  ++++++++++++++++++++++ " +existuser);
+    if(existuser) {
+
+      throw new EntityExistsException("User already exists with email  " +request.email() +" or  username" +request.username());
+    }
     addressRepository.findById(request.addressId()).orElseThrow(() -> new EntityNotFoundException("The address is not find with id :" +request.addressId()));
     List<Subject> allSubjects = subjectRepository.findAllById(request.subjectIds());
     if (allSubjects.size() != request.subjectIds().size()) {
@@ -132,14 +139,24 @@ public class StudentService {
           }
 
     Student student = mapper.toStudent(request);
+    System.out.println("\n le student est ::::::"  +student);
     Student savedStudent = studentRepository.save(student);
-    subjectRepository.saveAll(availableSubjects) ;
+     subjectRepository.saveAll(availableSubjects) ;
+    return mapper.toStudentResponse(savedStudent) ;
   }
   @Transactional
-  public void createStudentWithLessInformation(StudentLightRequest request) {
+  public StudentResponse createStudentWithLessInformation(StudentLightRequest request) {
+   Boolean existuser = studentRepository.existsByEmailOrUsername(request.getEmail(), request.getUsername());
+    System.out.println("\n la variable  ++++++++++++++++++++++ " +existuser);
+   if(existuser) {
 
+     throw new EntityExistsException("User already exists with email  " +request.getEmail() +" or  username" +request.getUsername());
+    }
     Student student = mapper.toStudent(request);
+    System.out.println("\n le student est ::::::"  +student);
     Student savedStudent = studentRepository.save(student);
+   return mapper.toStudentResponse(savedStudent);
+
   }
 
 
@@ -160,13 +177,22 @@ public class StudentService {
     if (StringUtils.hasLength(ln)) {
       mySpec = mySpec.or(withLastname(ln));
     }
-    Page<Student> students = studentRepository.findAll(
+    Page<Student> students;
+
+    if (!StringUtils.hasLength(fn) && !StringUtils.hasLength(ln) && !StringUtils.hasLength(email)) {
+      students = studentRepository.findAll(pageable);
+
+    }
+
+    else  {
+     students = studentRepository.findAll(
       mySpec,
       pageable
-    );
+    ); }
     Page<StudentResponse> studentResponses = students.map(student -> mapper.toStudentResponse(student));
 
     return studentResponses;
   }
+
 
 }

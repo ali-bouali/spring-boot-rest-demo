@@ -1,5 +1,6 @@
 package org.alibou.demo.subject.dto;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.alibou.demo.student.Student;
 import org.alibou.demo.student.dto.StudentMapper;
@@ -11,14 +12,13 @@ public class SubjectMapper {
 
 
   public Subject toSubject(SubjectRequest request) {
-
     Subject.SubjectBuilder subjectBuilder = Subject.builder()
-      .name(request.getName())
-      .capacity(request.getCapacity())
-      .description(request.getDescription())
-      .students(request.getStudents().stream()
-        .map(studentId -> Student.builder().id(studentId).build())
-        .collect(Collectors.toSet()));
+        .name(request.getName())
+        .capacity(request.getCapacity())
+        .description(request.getDescription())
+        .students((Set<Student>) request.getStudents().stream()
+            .map(studentId -> Student.builder().id(studentId).build())
+            .collect(Collectors.toSet()));
 
     if (request.getId() != null) {
       subjectBuilder.id(request.getId());
@@ -45,17 +45,23 @@ public class SubjectMapper {
 
   public SubjectResponse toSubjectResponse(Subject request, StudentMapper mapper) {
 
-    return SubjectResponse.builder()
+    SubjectResponse.SubjectResponseBuilder responseBuilder = SubjectResponse.builder()
+        .id(request.getId())
+        .name(request.getName())
+        .capacity(request.getCapacity())
+        .description(request.getDescription());
 
-      .id(request.getId())
-      .name(request.getName())
-      .capacity(request.getCapacity())
-      .description(request.getDescription())
-      .students(request.getStudents().stream().map(student -> mapper.toStudentResponse(student)).collect(Collectors.toSet()))
-      .build();
+    if (request.getStudents() != null) {
+      responseBuilder.students(
+          request.getStudents().stream()
+              .map(mapper::toStudentResponse)
+              .collect(Collectors.toSet())
+      );
+    }
 
-
+    return responseBuilder.build();
   }
+
 
   public SubjectLightRequest toSubjectLightRequest(Subject request) {
 

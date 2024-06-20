@@ -1,11 +1,13 @@
 package org.alibou.demo.teacher;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.subject.Subject;
+import org.alibou.demo.user.User;
 
 @Data
 @Entity
@@ -28,26 +31,16 @@ import org.alibou.demo.subject.Subject;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Teacher extends BaseEntity {
-
-  @Id
-  @SequenceGenerator(
-      name = "teacher_sequence",
-      sequenceName = "teacher_sequence",
-      allocationSize = 1
-  )
-  @GeneratedValue(
-      generator = "teacher_sequence",
-      strategy = GenerationType.SEQUENCE)
-  private Integer id;
-
-  @Column(nullable = false)
-   private String firstname;
-  @Column(length = 100, nullable = false)
-  private String lastname;
+@DiscriminatorValue("TEACHER")
+public class Teacher extends User {
 
   @ManyToOne
-  @JoinColumn(name = "subject_id")
+ // @JoinColumn(name = "subject_id")
+  @JoinTable(
+      name = "subscription",
+      joinColumns = @JoinColumn(name = "student_id"),
+      inverseJoinColumns = @JoinColumn(name = "subject_id")
+  )
   private Subject subject;
 
 

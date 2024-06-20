@@ -2,15 +2,13 @@ package org.alibou.demo.student;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.HashSet;
@@ -22,51 +20,31 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.alibou.demo.address.Address;
-import org.alibou.demo.common.BaseEntity;
 import org.alibou.demo.subject.Subject;
+import org.alibou.demo.user.User;
+
 @ToString
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "students", uniqueConstraints = {
     @UniqueConstraint(name = "students_email", columnNames = "email"),
     @UniqueConstraint(name = "students_username", columnNames = "username")
 })
-@SuperBuilder
-public class Student extends BaseEntity {
+@DiscriminatorValue("STUDENT")
+public class Student extends User {
 
-  @Id
-  @SequenceGenerator(
-      name = "student_sequence",
-      sequenceName = "student_sequence",
-      allocationSize = 1
-  )
-  @GeneratedValue(
-      generator = "student_sequence",
-      strategy = GenerationType.SEQUENCE)
-  private Integer id;
-  @Column(updatable = false, nullable = false, length = 500)
-
-  private String username;
-  @Column(nullable = false)
-  private String email;
-
-  @Column(length = 100)
-  private String firstname;
-  @Column(length = 100, nullable = false)
-  private String lastname;
   @OneToOne
   @JsonManagedReference
   private Address address;
-
-
   @ManyToMany
   @JoinTable(
-    name = "subscription",
-    joinColumns = @JoinColumn(name = "student_id"),
-    inverseJoinColumns = @JoinColumn(name = "subject_id")
+      name = "subscription",
+      joinColumns = @JoinColumn(name = "student_id"),
+      inverseJoinColumns = @JoinColumn(name = "subject_id")
   )
   private Set<Subject> subjects = new HashSet<>();
 

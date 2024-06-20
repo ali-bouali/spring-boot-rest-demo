@@ -23,22 +23,22 @@ public class SubjectController {
   private final SubjectService service;
 
   @PostMapping
-  public ResponseEntity<?> createSubject(
+  public ResponseEntity<SubjectResponse> createSubject(
     @RequestBody @Valid SubjectRequest subject
   ) {
-    service.createSubject(subject);
-    return ResponseEntity.accepted().body("success");
+    SubjectResponse subj = service.createSubject(subject);
+    return ResponseEntity.accepted().body(subj);
   }
 
 
    @PostMapping("/special")
   // with special access
 
-  public ResponseEntity<?> createSubjectWithLessInformation(
+  public ResponseEntity<SubjectResponse> createSubjectWithLessInformation(
     @RequestBody SubjectLightRequest subject
   ) {
-     service.createSubjectWithLessInformation(subject);
-     return ResponseEntity.accepted().body("success");
+     SubjectResponse subj = service.createSubjectWithLessInformation(subject);
+     return ResponseEntity.accepted().body(subj);
   }
 
   @GetMapping("/{id}")

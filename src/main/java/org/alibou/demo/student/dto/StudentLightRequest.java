@@ -16,9 +16,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudentLightRequest {
+    @NotEmpty(message = "username cannot be empty")
   private String username;
+  @NotEmpty(message = "firstname cannot be empty")
   private String firstname;
+  @NotEmpty(message = "lastname cannot be empty")
   private String lastname;
+  @NotEmpty(message = "password cannot be empty")
+  private String password;
   @Email(message = "Email should be valid")
   @NotNull(message = "Email cannot be null")
   @NotEmpty(message = "Email cannot be empty")

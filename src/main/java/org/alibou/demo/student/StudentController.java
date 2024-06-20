@@ -1,5 +1,6 @@
 package org.alibou.demo.student;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.alibou.demo.student.dto.StudentLightRequest;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,26 +23,34 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
 
   private final StudentService service;
+  private final StudentRepository  studentRepository ;
   @PostMapping
-  public ResponseEntity<?> createStudent(
+  public ResponseEntity<StudentResponse> createStudent(
     @RequestBody @Valid StudentRequest student
   ) {
-    service.createStudent(student);
-    return ResponseEntity.accepted().body("success");
+
+    StudentResponse studentResponse = service.createStudent(student);
+    return ResponseEntity.accepted().body(studentResponse);
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<StudentResponse> updateStudent( @PathVariable("id")  Integer id,
+      @RequestBody @Valid StudentRequest student
+  ) {
+   studentRepository.findById(id).orElseThrow(()->new EntityNotFoundException(" The student  is not found with  " + id));
+    StudentResponse studentResponse = service.createStudent(student);
+    return ResponseEntity.accepted().body(studentResponse);
+  }
 
    @PostMapping("/special")
-  // with special access
 
-  public ResponseEntity<?> createStudentWithLessInformation(
+  public ResponseEntity<StudentResponse> createStudentWithLessInformation(
     @RequestBody StudentLightRequest student
   ) {
-     service.createStudentWithLessInformation(student);
-     return ResponseEntity.accepted().body("success");
+     StudentResponse resStudent=  service.createStudentWithLessInformation(student);
+     return ResponseEntity.accepted().body(resStudent);
   }
-
-  @GetMapping("/{id}")
+    @GetMapping("/{id}")
   public ResponseEntity<StudentResponse> getStudentById(@PathVariable Integer id) {
     // Assume studentService.findById(id) returns an Optional<Student>
     return service.findById(id)

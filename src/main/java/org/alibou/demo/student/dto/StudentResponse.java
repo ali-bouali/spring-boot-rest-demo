@@ -14,6 +14,7 @@ import lombok.Setter;
 @Setter
 
 public class StudentResponse {
+  private Integer id ;
   private String username;
   private String email;
   private String firstname;

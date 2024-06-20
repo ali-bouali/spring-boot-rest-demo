@@ -32,30 +32,28 @@ public class SubjectService {
 
 
   @Transactional
-  public void createSubject(SubjectRequest request) {
+  public SubjectResponse createSubject(SubjectRequest request) {
     if (request.getId() != null) {
       studentRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Student is not found :" + (request.getId())));
     }
-
-
     Set<Student> availableStudents = studentRepository.findAllById(request.getStudents()).stream().collect(Collectors.toSet());
     if (availableStudents.size() != request.getStudents().size()) {
       throw new EntityNotFoundException("Not all the students are available...");
     }
 
-    subjectRepository.save(subjectMapper.toSubject(request));
+    return subjectMapper.toSubjectResponse(subjectRepository.save(subjectMapper.toSubject(request)),studentMapper);
 
   }
 
 
-  public void createSubjectWithLessInformation(SubjectLightRequest request) {
+  public SubjectResponse createSubjectWithLessInformation(SubjectLightRequest request) {
 
 
     if (request.getId() != null) {
       studentRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Student is not found :" + (request.getId())));
     }
 
-    subjectRepository.save(subjectMapper.toSubject(request));
+    return subjectMapper.toSubjectResponse(subjectRepository.save(subjectMapper.toSubject(request)),studentMapper);
   }
 
   public Optional<SubjectResponse> findById(Integer id) {
@@ -77,11 +75,17 @@ public class SubjectService {
     if (StringUtils.hasLength(name)) {
       mySpec = mySpec.or(SubjectSpecification.withName(name));
     }
-
-      Page<Subject> subjects = subjectRepository.findAll(
-      mySpec,
-      pageable
-    );
+    Page<Subject> subjects ;
+    if(!StringUtils.hasLength(name)&&capacity == null) {
+      subjects = subjectRepository.findAll(pageable);
+    }
+      else
+      {
+       subjects = subjectRepository.findAll(
+          mySpec,
+          pageable
+      );
+    }
     Page<SubjectResponse> sbjectResponse = subjects.map(subject -> subjectMapper.toSubjectResponse(subject, studentMapper));
 
     return sbjectResponse;

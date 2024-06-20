@@ -33,11 +33,6 @@ import org.alibou.demo.subject.Subject;
 })
 @SuperBuilder
 public class Chapter extends BaseEntity {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chapter_sequence")
-  @SequenceGenerator(name = "chapter_sequence", sequenceName = "chapter_sequence", allocationSize = 1)
-  private Long id;
   @Column(nullable = false)
   private String title;
   @ManyToOne

@@ -13,14 +13,16 @@ public class StudentMapper {
   public Student toStudent(StudentRequest request) {
 
     return Student.builder()
-      .id(request.id())
-      .firstname(request.firstname())
-      .username(request.username())
-      .lastname(request.lastname())
-      .email(request.email())
-      .subjects(request.subjectIds().stream().map(id -> Subject.builder().id(id).build()).collect(Collectors.toSet()))
-      .address(Address.builder().id(request.addressId()).build())
-      .build();
+        .id(request.id())
+        .firstname(request.firstname())
+        .username(request.username())
+        .lastname(request.lastname())
+        .password(request.password())
+        .email(request.email())
+        .subjects(request.subjectIds().stream().map(id -> Subject.builder().id(id).build())
+            .collect(Collectors.toSet()))
+        .address(Address.builder().id(request.addressId()).build())
+        .build();
 
 
   }
@@ -29,20 +31,22 @@ public class StudentMapper {
   public Student toStudent(StudentLightRequest request) {
 
     return Student.builder()
-      .username(request.getUsername())
-      .firstname(request.getFirstname())
-      .lastname(request.getLastname())
-      .email(request.getEmail())
-      .build();
+        .username(request.getUsername())
+        .firstname(request.getFirstname())
+        .lastname(request.getLastname())
+        .password(request.getPassword())
+        .email(request.getEmail())
+        .build();
   }
 
 
   public StudentResponse toStudentResponse(Student request) {
 
     return StudentResponse.builder().username(request.getUsername())
-      .firstname(request.getFirstname())
-      .lastname(request.getLastname())
-      .email(request.getEmail()).build();
+        .id(request.getId())
+        .firstname(request.getFirstname())
+        .lastname(request.getLastname())
+        .email(request.getEmail()).build();
 
 
   }
@@ -50,11 +54,10 @@ public class StudentMapper {
   public StudentLightRequest toStudentLightRequest(Student request) {
 
     return StudentLightRequest.builder()
-      .username(request.getUsername())
-      .firstname(request.getFirstname())
+        .username(request.getUsername())
+        .firstname(request.getFirstname())
 
-      .lastname(request.getLastname()) .build();
-
+        .lastname(request.getLastname()).build();
 
 
   }

@@ -32,11 +32,6 @@ import org.alibou.demo.common.BaseEntity;
 @Table(name = "contents")
 public class Content extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "content_sequence")
-  @SequenceGenerator(name = "content_sequence", sequenceName = "content_sequence", allocationSize = 1)
-  private Long id;
-
   @Column(nullable = false)
   private String content;
   @ManyToOne

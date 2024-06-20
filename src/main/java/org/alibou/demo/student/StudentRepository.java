@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface StudentRepository extends JpaRepository<Student, Integer> ,
     JpaSpecificationExecutor<Student> {
 
+
+  Boolean existsByEmailOrUsername(String email, String username);
   //1. Find by a Single Property
   Optional<Student> findByUsernameIgnoreCase(String username);
 
