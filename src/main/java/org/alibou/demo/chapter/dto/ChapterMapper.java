@@ -52,7 +52,7 @@ public class ChapterMapper {
       chapterBuilder.subject(Subject.builder().id(request.getSubject()).build());
     }
     if (request.getContents() != null) {
-      chapterBuilder.contents(
+      chapterBuilder.contents (
           request.getContents().stream()
               .map(id -> Content.builder().id(id).build())
               .collect(Collectors.toSet())
