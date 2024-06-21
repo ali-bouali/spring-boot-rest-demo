@@ -5,12 +5,16 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 public class StudentSpecification {
+
   public static Specification<Student> withCreatedAt(LocalDateTime createdAt) {
-    return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("createdAt"), createdAt));
+    return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("createdAt"),
+        createdAt));
   }
+
   public static Specification<Student> withEmail(String email) {
     return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("email"), email));
   }
+
   public static Specification<Student> withFirstname(String fn) {
     return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("firstname"), fn));
   }
@@ -18,6 +22,7 @@ public class StudentSpecification {
   public static Specification<Student> withLastname(String ln) {
     return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("lastname"), ln));
   }
+
   public static Specification<Student> withSubjectIds(List<Integer> ids) {
     return ((root, query, criteriaBuilder) -> criteriaBuilder.in(
             root.get("subjects")
@@ -25,12 +30,15 @@ public class StudentSpecification {
         .value(ids)
     );
   }
+
   /**
    * criteria with nested objects / attributes
+   *
    * @param street
    * @return
    */
   public static Specification<Student> withAddressStreet(String street) {
-    return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("address").get("street"), street));
+    return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(
+        root.get("address").get("street"), street));
   }
 }

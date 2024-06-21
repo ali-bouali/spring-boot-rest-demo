@@ -2,13 +2,9 @@ package org.alibou.demo.chapter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.HashSet;
@@ -33,6 +29,7 @@ import org.alibou.demo.subject.Subject;
 })
 @SuperBuilder
 public class Chapter extends BaseEntity {
+
   @Column(nullable = false)
   private String title;
   @ManyToOne

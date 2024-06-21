@@ -1,8 +1,6 @@
 package org.alibou.demo.student;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -43,7 +41,7 @@ public class Student extends User {
   @ManyToMany
   @JoinTable(
       name = "subscription",
-      joinColumns = @JoinColumn(name = "student_id"),
+      joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "subject_id")
   )
   private Set<Subject> subjects = new HashSet<>();

@@ -5,7 +5,6 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +26,7 @@ public class BaseEntity {
 
   @Id
   @GeneratedValue
-  private  Integer id;
+  private Integer id;
   @Column(updatable = false)
   @CreatedDate
   private LocalDateTime createdAt;

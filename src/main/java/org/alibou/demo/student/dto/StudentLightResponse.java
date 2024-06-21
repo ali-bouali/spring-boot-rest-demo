@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class StudentLightResponse {
+
   private String firstname;
   private String lastname;
 }

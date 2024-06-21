@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,7 +15,8 @@ import lombok.Setter;
 @Setter
 
 public class StudentResponse {
-  private Integer id ;
+
+  private Integer id;
   private String username;
   private String email;
   private String firstname;

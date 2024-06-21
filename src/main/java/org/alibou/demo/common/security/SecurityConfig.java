@@ -4,16 +4,15 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StringUtils;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 //import org.alibou.demo.filters.HttpRequestFilter;
 @Configuration
 @EnableWebSecurity
@@ -21,7 +20,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @RequiredArgsConstructor
 public class SecurityConfig {
 
- // private  final HttpRequestFilter filter;
+  // private  final HttpRequestFilter filter;
 
   // @Bean
   public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
@@ -59,9 +58,10 @@ public class SecurityConfig {
                 .anyRequest()
                 .permitAll()
         )
-       // .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+    // .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
     // .httpBasic(Customizer.withDefaults())
     ;
 
     return http.build();
-  } }
+  }
+}

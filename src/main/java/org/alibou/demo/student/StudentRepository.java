@@ -9,13 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 @EnableJpaAuditing
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Integer> ,
+public interface StudentRepository extends JpaRepository<Student, Integer>,
     JpaSpecificationExecutor<Student> {
 
 
   Boolean existsByEmailOrUsername(String email, String username);
+
+  Boolean existsByEmailOrUsernameAndIdNot(String email, String username, Integer id);
+
   //1. Find by a Single Property
   Optional<Student> findByUsernameIgnoreCase(String username);
 
@@ -38,32 +42,37 @@ public interface StudentRepository extends JpaRepository<Student, Integer> ,
   //7. Find by Status and Sorted by a Nested Property
   List<Student> findByUsernameAndSubjectsNameOrderByLastnameDesc(String username,
       String subjectsName);
-//  @Query("SELECT o FROM Student o WHERE o.firstname = :firstname AND o.email = :email ORDER BY o.lastname DESC")
+
+  //  @Query("SELECT o FROM Student o WHERE o.firstname = :firstname AND o.email = :email ORDER BY o.lastname DESC")
 //  List<Order> findOrdersByStatusAndCustomerName(@Param("firstname") String firstname, @Param("email") String email);
-@Query(value = """
-    select
-        s.firstname as studentFn,
-        s.lastname as studentLn,
-        sb.name as subName,
-        sb.description as subDesc,
-        t.firstname as teacherFn,
-        t.lastname as teacherLn
-    from Student s
-    inner join s.subjects sb
-    inner join sb.teachers t
-    where s.firstname = :param
-    """)
+  @Query(value = """
+      select
+          s.firstname as studentFn,
+          s.lastname as studentLn,
+          sb.name as subName,
+          sb.description as subDesc,
+          t.firstname as teacherFn,
+          t.lastname as teacherLn
+      from Student s
+      inner join s.subjects sb
+      inner join sb.teachers t
+      where s.firstname = :param
+      """)
   List<StudentSubjectResponseProjection> findByComplexQuery(String param);
 
   @Query("update Student set firstname = concat(firstname, '-', :s)")
   @Modifying
   void updateAllStudents(@Param(value = "s") String suffix);
+
   Optional<Student> findTop1StudentByFirstnameContainingIgnoreCase(String s);
+
   List<Student> findStudentByLastnameContainingIgnoreCase(String lastname);
-//  @Query(value = """
+
+  //  @Query(value = """
 //        select s from Student s
 //        inner join  s.subjects subj
 //        inner join subj.teachers t
 //        where t.id = :teacherId
 //        """)
-  List<Student> findBySubjectsTeachersId(@Param("teacherId") Integer teacherId);}//ask ali
+  List<Student> findBySubjectsTeachersId(@Param("teacherId") Integer teacherId);
+}//ask ali

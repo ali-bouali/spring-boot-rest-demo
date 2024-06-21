@@ -27,57 +27,57 @@ public class GlobalControllerExceptionHandler {
 
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<?> EntityNotFoundException(EntityNotFoundException ex,
-                                                   WebRequest request) {
+      WebRequest request) {
 
     ErrorDetails errorDetails = new ErrorDetails(HttpStatus.NOT_FOUND.value(),
-      new Date(),
-      ex.getMessage(),
-      request.getDescription(false));
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false));
     return new ResponseEntity<>(errorDetails,
-      HttpStatus.NOT_FOUND);
+        HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(BadRequestException.class)
   public ResponseEntity<?> badRequestException(BadRequestException ex,
-                                               WebRequest request) {
+      WebRequest request) {
 
     ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(),
-      new Date(),
-      ex.getMessage(),
-      request.getDescription(false));
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false));
     return new ResponseEntity<>(errorDetails,
-      HttpStatus.BAD_REQUEST);
+        HttpStatus.BAD_REQUEST);
   }
 
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<?> globalExceptionHandler(Exception ex,
-                                                  WebRequest request) {
+      WebRequest request) {
 
     ErrorDetails errorDetails = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-      new Date(),
-      ex.getMessage(),
-      request.getDescription(false));
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false));
     return new ResponseEntity<>(errorDetails,
-      HttpStatus.INTERNAL_SERVER_ERROR);
+        HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorDetails> handleValidationErrors(MethodArgumentNotValidException ex,
-                                                             WebRequest request) {
+      WebRequest request) {
     List<String> errors = ex.getBindingResult().getFieldErrors()
-      .stream()
-      .map(fe -> String.format("Field '%s': %s", fe.getField(), fe.getDefaultMessage()))
-      .collect(Collectors.toList());
+        .stream()
+        .map(fe -> String.format("Field '%s': %s", fe.getField(), fe.getDefaultMessage()))
+        .collect(Collectors.toList());
 
     String combinedErrors = String.join(", ", errors);
 
     ErrorDetails errorDetails = new ErrorDetails(
-      HttpStatus.BAD_REQUEST.value(),
-      new Date(),
-      "Validation failed",
-      combinedErrors
+        HttpStatus.BAD_REQUEST.value(),
+        new Date(),
+        "Validation failed",
+        combinedErrors
     );
 
     return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
@@ -87,40 +87,40 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(AccessDeniedException.class)
   @ResponseBody
   public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex,
-                                                       HttpServletRequest request) {
+      HttpServletRequest request) {
 
     ErrorDetails errorDetails = new ErrorDetails(HttpStatus.FORBIDDEN.value(),
-      new Date(),
-      ex.getMessage(),
-      request.getRequestURI());
+        new Date(),
+        ex.getMessage(),
+        request.getRequestURI());
     return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
   }
 
 
   protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                HttpHeaders headers,
-                                                                HttpStatus status,
-                                                                WebRequest request) {
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
 
     String message = ex.getMostSpecificCause()
-      .getMessage();
+        .getMessage();
     ErrorDetails errorDetails;
     if (message.contains("Cannot deserialize value of type") && message.contains("from String")
-      && message.contains("not one of the values accepted for Enum class")) {
+        && message.contains("not one of the values accepted for Enum class")) {
       String errorMessage = "The provided value is invalid. Accepted values are: MALE, " +
-        "FEMALE, OTHER.";
+          "FEMALE, OTHER.";
       errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(),
-        new Date(),
-        errorMessage,
-        request.getDescription(false));
+          new Date(),
+          errorMessage,
+          request.getDescription(false));
     } else {
       errorDetails = new ErrorDetails(status.value(),
-        new Date(),
-        "Error processing request",
-        request.getDescription(false));
+          new Date(),
+          "Error processing request",
+          request.getDescription(false));
     }
     return new ResponseEntity<>(errorDetails,
-      HttpStatus.BAD_REQUEST);
+        HttpStatus.BAD_REQUEST);
   }
 
 
@@ -132,24 +132,26 @@ public class GlobalControllerExceptionHandler {
 
   @ExceptionHandler(EntityExistsException.class)
   public ResponseEntity<ErrorDetails> handleEntityExistsException(
-    EntityExistsException ex, WebRequest request) {
+      EntityExistsException ex, WebRequest request) {
     ErrorDetails errorDetails = new ErrorDetails(
-      HttpStatus.CONFLICT.value(),
-      new Date(),
-      ex.getMessage(),
-      request.getDescription(false)
+        HttpStatus.CONFLICT.value(),
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false)
     );
 
     return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
   }
+
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(SubjectMaxLimitExceeded.class)
-  public ResponseEntity<ErrorDetails> handleSubjectMaxLimitExceeded(SubjectMaxLimitExceeded ex ,  WebRequest request) {
+  public ResponseEntity<ErrorDetails> handleSubjectMaxLimitExceeded(SubjectMaxLimitExceeded ex,
+      WebRequest request) {
     ErrorDetails errorDetails = new ErrorDetails(HttpStatus.NOT_FOUND.value(),
-      new Date(),
-      ex.getMessage(),
-      request.getDescription(false));
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false));
     return new ResponseEntity<>(errorDetails,
-      HttpStatus.NOT_FOUND);
+        HttpStatus.NOT_FOUND);
   }
 }

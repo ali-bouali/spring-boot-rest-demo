@@ -1,17 +1,17 @@
 package org.alibou.demo.subject;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.alibou.demo.student.Student;
 import org.alibou.demo.student.StudentRepository;
 import org.alibou.demo.student.dto.StudentMapper;
+import org.alibou.demo.subject.dto.SubjectCreateRequest;
 import org.alibou.demo.subject.dto.SubjectLightRequest;
 import org.alibou.demo.subject.dto.SubjectMapper;
-import org.alibou.demo.subject.dto.SubjectRequest;
 import org.alibou.demo.subject.dto.SubjectResponse;
+import org.alibou.demo.subject.dto.SubjectUpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +19,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import static org.alibou.demo.subject.SubjectSpecification.withCapacity;
-import static org.alibou.demo.subject.SubjectSpecification.withName;
 
 @AllArgsConstructor
 @Service
 public class SubjectService {
+
   private final SubjectRepository subjectRepository;
   private final StudentMapper studentMapper;
   private final SubjectMapper subjectMapper;
@@ -32,32 +31,49 @@ public class SubjectService {
 
 
   @Transactional
-  public SubjectResponse createSubject(SubjectRequest request) {
-    if (request.getId() != null) {
-      studentRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Student is not found :" + (request.getId())));
-    }
-    Set<Student> availableStudents = studentRepository.findAllById(request.getStudents()).stream().collect(Collectors.toSet());
+  public SubjectResponse createSubject(SubjectCreateRequest request) {
+    Set<Student> availableStudents = studentRepository.findAllById(request.getStudents()).stream()
+        .collect(Collectors.toSet());
     if (availableStudents.size() != request.getStudents().size()) {
       throw new EntityNotFoundException("Not all the students are available...");
     }
 
-    return subjectMapper.toSubjectResponse(subjectRepository.save(subjectMapper.toSubject(request)),studentMapper);
+    return subjectMapper.toSubjectResponse(subjectRepository.save(subjectMapper.toSubject(request)),
+        studentMapper);
 
   }
 
+  @Transactional
+  public SubjectResponse updateSubject(SubjectUpdateRequest request) {
+    if (request.getId() != null) {
+      studentRepository.findById(request.getId()).orElseThrow(
+          () -> new EntityNotFoundException("Student is not found :" + (request.getId())));
+    }
+    Set<Student> availableStudents = studentRepository.findAllById(request.getStudents()).stream()
+        .collect(Collectors.toSet());
+    if (availableStudents.size() != request.getStudents().size()) {
+      throw new EntityNotFoundException("Not all the students are available...");
+    }
+
+    return subjectMapper.toSubjectResponse(subjectRepository.save(subjectMapper.toSubject(request)),
+        studentMapper);
+
+  }
 
   public SubjectResponse createSubjectWithLessInformation(SubjectLightRequest request) {
 
+    //if (request.getId() != null) {
+    // studentRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Sub is not found :" + (request.getId())));
+    //}
 
-    if (request.getId() != null) {
-      studentRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Student is not found :" + (request.getId())));
-    }
-
-    return subjectMapper.toSubjectResponse(subjectRepository.save(subjectMapper.toSubject(request)),studentMapper);
+    return subjectMapper.toSubjectResponse(subjectRepository.save(subjectMapper.toSubject(request)),
+        studentMapper);
   }
 
-  public Optional<SubjectResponse> findById(Integer id) {
-    Optional<SubjectResponse> subjectResponse = subjectRepository.findById(id).map(subject -> subjectMapper.toSubjectResponse(subject, studentMapper));
+  public SubjectResponse findById(Integer id) {
+    SubjectResponse subjectResponse = subjectRepository.findById(id)
+        .map(subject -> subjectMapper.toSubjectResponse(subject, studentMapper))
+        .orElseThrow(() -> new EntityNotFoundException("Subject is not found : " + id));
     return subjectResponse;
 
 
@@ -75,19 +91,23 @@ public class SubjectService {
     if (StringUtils.hasLength(name)) {
       mySpec = mySpec.or(SubjectSpecification.withName(name));
     }
-    Page<Subject> subjects ;
-    if(!StringUtils.hasLength(name)&&capacity == null) {
+    Page<Subject> subjects;
+    if (!StringUtils.hasLength(name) && capacity == null) {
       subjects = subjectRepository.findAll(pageable);
-    }
-      else
-      {
-       subjects = subjectRepository.findAll(
+    } else {
+      subjects = subjectRepository.findAll(
           mySpec,
           pageable
       );
     }
-    Page<SubjectResponse> sbjectResponse = subjects.map(subject -> subjectMapper.toSubjectResponse(subject, studentMapper));
+    Page<SubjectResponse> sbjectResponse = subjects.map(
+        subject -> subjectMapper.toSubjectResponse(subject, studentMapper));
 
     return sbjectResponse;
+  }
+
+  @Transactional
+  public void deleteSubjectById(Integer id) {
+    subjectRepository.deleteById(id);
   }
 }

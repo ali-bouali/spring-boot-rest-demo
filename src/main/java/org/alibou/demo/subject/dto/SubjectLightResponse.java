@@ -3,7 +3,6 @@ package org.alibou.demo.subject.dto;
 import java.util.HashSet;
 import java.util.Set;
 import org.alibou.demo.student.dto.StudentLightResponse;
-import org.alibou.demo.student.dto.StudentResponse;
 
 public class SubjectLightResponse {
 
@@ -18,5 +17,5 @@ public class SubjectLightResponse {
 
   //private Set<Integer> teachers = new HashSet<>();
 
- // private Set<Integer> chapters = new HashSet<>();
+  // private Set<Integer> chapters = new HashSet<>();
 }

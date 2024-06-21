@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-public class TeacherRequest {
-  private Integer id;
+public class TeacherCreateRequest {
+
   @NotNull(message = "firstname cannot be null")
   @NotEmpty(message = "firstname cannot be empty")
   private String firstname;

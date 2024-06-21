@@ -15,22 +15,19 @@ public class SpringBootRestDemoApplication {
   private final StudentService studentService;
 
   public SpringBootRestDemoApplication(StudentRepository repo, StudentService studentService) {
-    this.repo = repo;  // Constructor injection
+    this.repo = repo;
     this.studentService = studentService;
   }
 
   public static void main(String[] args) {
     SpringApplication.run(SpringBootRestDemoApplication.class, args);
-
-
   }
 
   @Bean
   public CommandLineRunner commandLineRunner() {
     return args -> {
 
-
-      //        StudentRequest request = new StudentRequest(
+      //        StudentCreateRequest request = new StudentCreateRequest(
       //         null,
       //          "MBh123",
       //          "MBh123",

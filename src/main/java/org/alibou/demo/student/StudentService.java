@@ -1,29 +1,32 @@
 package org.alibou.demo.student;
+
+import static org.alibou.demo.student.StudentSpecification.withEmail;
+import static org.alibou.demo.student.StudentSpecification.withFirstname;
+import static org.alibou.demo.student.StudentSpecification.withLastname;
+
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.alibou.demo.address.AddressRepository;
 import org.alibou.demo.common.exception.SubjectMaxLimitExceeded;
+import org.alibou.demo.student.dto.StudentCreateRequest;
 import org.alibou.demo.student.dto.StudentLightRequest;
 import org.alibou.demo.student.dto.StudentMapper;
 import org.alibou.demo.student.dto.StudentResponse;
-import org.alibou.demo.subject.SubjectRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.alibou.demo.address.AddressRepository;
-import org.alibou.demo.student.dto.StudentRequest;
+import org.alibou.demo.student.dto.StudentUpdateRequest;
 import org.alibou.demo.subject.Subject;
+import org.alibou.demo.subject.SubjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional; //askali
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import static org.alibou.demo.student.StudentSpecification.withEmail;
-import static org.alibou.demo.student.StudentSpecification.withFirstname;
-import static org.alibou.demo.student.StudentSpecification.withLastname;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +34,9 @@ public class StudentService {
 
   private final StudentRepository studentRepository;
   private final AddressRepository addressRepository;
-  private final SubjectRepository subjectRepository ;
-  private final StudentMapper  mapper ;
+  private final SubjectRepository subjectRepository;
+  private final StudentMapper mapper;
+
   @Transactional
   public void updateAllStudents() {
     studentRepository.updateAllStudents("--");
@@ -73,6 +77,7 @@ public class StudentService {
       System.out.println("-----");
     });
   }
+
   @Transactional(readOnly = true)
   public void findBySubjectsTeachersId(Integer id) {
     List<Student> results = studentRepository.findBySubjectsTeachersId(id);
@@ -111,64 +116,112 @@ public class StudentService {
   }
 
   @Transactional
-  public StudentResponse createStudent(StudentRequest request) {
-    Boolean existuser = studentRepository.existsByEmailOrUsername(request.email(), request.username());
-    System.out.println("\n la variable  ++++++++++++++++++++++ " +existuser);
-    if(existuser) {
+  public StudentResponse createStudent(StudentCreateRequest request) {
+    Boolean existuser = studentRepository.existsByEmailOrUsername(request.email(),
+        request.username());
+    System.out.println("\n la variable  ++++++++++++++++++++++ " + existuser);
+    if (existuser) {
 
-      throw new EntityExistsException("User already exists with email  " +request.email() +" or  username" +request.username());
+      throw new EntityExistsException(
+          "User already exists with email  " + request.email() + " or  username"
+              + request.username());
     }
-    addressRepository.findById(request.addressId()).orElseThrow(() -> new EntityNotFoundException("The address is not find with id :" +request.addressId()));
+    addressRepository.findById(request.addressId()).orElseThrow(() -> new EntityNotFoundException(
+        "The address is not find with id :" + request.addressId()));
     List<Subject> allSubjects = subjectRepository.findAllById(request.subjectIds());
     if (allSubjects.size() != request.subjectIds().size()) {
       throw new EntityNotFoundException("Not all the subjects are available...");
     }
     List<Subject> availableSubjects = allSubjects.stream()
-      .peek(subject -> {
-        if (subject.getCapacity() <= 0) {
-          throw new SubjectMaxLimitExceeded("Subject with ID " + subject.getId() + " has exceeded its capacity.");
-        }
-        subject.setCapacity(subject.getCapacity() - 1);
-      })
-      .collect(Collectors.toList());
-
-
+        .peek(subject -> {
+          if (subject.getCapacity() <= 0) {
+            throw new SubjectMaxLimitExceeded(
+                "Subject with ID " + subject.getId() + " has exceeded its capacity.");
+          }
+          subject.setCapacity(subject.getCapacity() - 1);
+        })
+        .collect(Collectors.toList());
 
     if (availableSubjects.size() != request.subjectIds().size()) {
       throw new EntityNotFoundException("Not all the subjects are available...");
-          }
+    }
 
     Student student = mapper.toStudent(request);
-    System.out.println("\n le student est ::::::"  +student);
+    System.out.println("\n le student est ::::::" + student);
     Student savedStudent = studentRepository.save(student);
-     subjectRepository.saveAll(availableSubjects) ;
-    return mapper.toStudentResponse(savedStudent) ;
+    subjectRepository.saveAll(availableSubjects);
+    return mapper.toStudentResponse(savedStudent);
   }
+
+  @Transactional
+  public StudentResponse updateStudent(StudentUpdateRequest request) {
+    Boolean existuser = studentRepository.existsByEmailOrUsernameAndIdNot(request.email(),
+        request.username(), request.id());
+    System.out.println("\n la variable  ++++++++++++++++++++++ " + existuser);
+    if (existuser) {
+
+      throw new EntityExistsException(
+          "User already exists with email  " + request.email() + " or  username"
+              + request.username());
+    }
+    addressRepository.findById(request.addressId()).orElseThrow(() -> new EntityNotFoundException(
+        "The address is not find with id :" + request.addressId()));
+    List<Subject> allSubjects = subjectRepository.findAllById(request.subjectIds());
+    if (allSubjects.size() != request.subjectIds().size()) {
+      throw new EntityNotFoundException("Not all the subjects are available...");
+    }
+    List<Subject> availableSubjects = allSubjects.stream()
+        .peek(subject -> {
+          if (subject.getCapacity() <= 0) {
+            throw new SubjectMaxLimitExceeded(
+                "Subject with ID " + subject.getId() + " has exceeded its capacity.");
+          }
+          subject.setCapacity(subject.getCapacity() - 1);
+        })
+        .collect(Collectors.toList());
+
+    if (availableSubjects.size() != request.subjectIds().size()) {
+      throw new EntityNotFoundException("Not all the subjects are available...");
+    }
+
+    Student student = mapper.toStudent(request);
+    System.out.println("\n le student est ::::::" + student);
+    Student savedStudent = studentRepository.save(student);
+    subjectRepository.saveAll(availableSubjects);
+    return mapper.toStudentResponse(savedStudent);
+  }
+
   @Transactional
   public StudentResponse createStudentWithLessInformation(StudentLightRequest request) {
-   Boolean existuser = studentRepository.existsByEmailOrUsername(request.getEmail(), request.getUsername());
-    System.out.println("\n la variable  ++++++++++++++++++++++ " +existuser);
-   if(existuser) {
+    Boolean existuser = studentRepository.existsByEmailOrUsername(request.getEmail(),
+        request.getUsername());
+    System.out.println("\n la variable  ++++++++++++++++++++++ " + existuser);
+    if (existuser) {
 
-     throw new EntityExistsException("User already exists with email  " +request.getEmail() +" or  username" +request.getUsername());
+      throw new EntityExistsException(
+          "User already exists with email  " + request.getEmail() + " or  username"
+              + request.getUsername());
     }
     Student student = mapper.toStudent(request);
-    System.out.println("\n le student est ::::::"  +student);
+    System.out.println("\n le student est ::::::" + student);
     Student savedStudent = studentRepository.save(student);
-   return mapper.toStudentResponse(savedStudent);
+    return mapper.toStudentResponse(savedStudent);
 
   }
 
 
-  Optional<StudentResponse> findById (Integer id )
-  {
-    Student student =studentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("the student not found with id  :" +id));
-   return Optional.ofNullable( mapper.toStudentResponse(student));
+  StudentResponse findById(Integer id) {
+    Student student = studentRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("the student not found with id  :" + id));
+    return mapper.toStudentResponse(student);
   }
 
+  @Transactional
+  public void deleteStudentById(Integer id) {
+    studentRepository.deleteById(id);
+  }
 
-
-  public Page<StudentResponse> search(String fn, String ln, String email , int page, int size) {
+  public Page<StudentResponse> search(String fn, String ln, String email, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
     Specification<Student> mySpec = withEmail(email);
     if (StringUtils.hasLength(fn)) {
@@ -182,14 +235,14 @@ public class StudentService {
     if (!StringUtils.hasLength(fn) && !StringUtils.hasLength(ln) && !StringUtils.hasLength(email)) {
       students = studentRepository.findAll(pageable);
 
+    } else {
+      students = studentRepository.findAll(
+          mySpec,
+          pageable
+      );
     }
-
-    else  {
-     students = studentRepository.findAll(
-      mySpec,
-      pageable
-    ); }
-    Page<StudentResponse> studentResponses = students.map(student -> mapper.toStudentResponse(student));
+    Page<StudentResponse> studentResponses = students.map(
+        student -> mapper.toStudentResponse(student));
 
     return studentResponses;
   }

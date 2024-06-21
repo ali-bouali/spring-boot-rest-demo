@@ -12,7 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressResponse {
-  private  Integer id ;
+
+  private Integer id;
   private String street;
   private String city;
   private String state;

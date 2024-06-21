@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Integer>,
-  JpaSpecificationExecutor<Subject> {
+    JpaSpecificationExecutor<Subject> {
   //@Query("SELECT s FROM Subject s WHERE s.id IN :ids AND s.capacity > 0")
   // Set<Subject> findAllByIdAndCapacityGreaterThanZero(@Param("ids") Set<Integer> ids);
+
 }
 
 

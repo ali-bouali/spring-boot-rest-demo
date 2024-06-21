@@ -11,20 +11,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class SubjectRequest {
+public class SubjectCreateRequest {
 
-
-  private Integer id;
   @NotNull(message = "name cannot be null")
   @NotEmpty(message = "name cannot be empty")
   private String name;
-
   private Integer capacity;
   private String description;
-
   private Set<Integer> students = new HashSet<>();
-
   private Set<Integer> teachers = new HashSet<>();
-
   private Set<Integer> chapters = new HashSet<>();
 }

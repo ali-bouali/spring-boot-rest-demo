@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.alibou.demo.subject.dto.SubjectLightRequest;
-import org.alibou.demo.subject.dto.SubjectResponse;
+
 @Setter
 @Getter
 @Builder

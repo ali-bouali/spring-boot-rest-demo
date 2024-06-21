@@ -11,7 +11,19 @@ import org.springframework.stereotype.Service;
 public class SubjectMapper {
 
 
-  public Subject toSubject(SubjectRequest request) {
+  public Subject toSubject(SubjectCreateRequest request) {
+    Subject.SubjectBuilder subjectBuilder = Subject.builder()
+        .name(request.getName())
+        .capacity(request.getCapacity())
+        .description(request.getDescription())
+        .students((Set<Student>) request.getStudents().stream()
+            .map(studentId -> Student.builder().id(studentId).build())
+            .collect(Collectors.toSet()));
+    return subjectBuilder.build();
+  }
+
+
+  public Subject toSubject(SubjectUpdateRequest request) {
     Subject.SubjectBuilder subjectBuilder = Subject.builder()
         .name(request.getName())
         .capacity(request.getCapacity())
@@ -28,18 +40,14 @@ public class SubjectMapper {
   }
 
 
-
-
-
-
   public Subject toSubject(SubjectLightRequest request) {
 
     return Subject.builder()
-      .id(request.getId())
-      .name(request.getName())
-      .capacity(request.getCapacity())
-      .description(request.getDescription())
-      .build();
+        .id(request.getId())
+        .name(request.getName())
+        .capacity(request.getCapacity())
+        .description(request.getDescription())
+        .build();
   }
 
 
@@ -67,11 +75,11 @@ public class SubjectMapper {
 
     return SubjectLightRequest.builder()
 
-      .id(request.getId())
-      .name(request.getName())
-      .capacity(request.getCapacity())
-      .description(request.getDescription())
-      .build();
+        .id(request.getId())
+        .name(request.getName())
+        .capacity(request.getCapacity())
+        .description(request.getDescription())
+        .build();
 
 
   }

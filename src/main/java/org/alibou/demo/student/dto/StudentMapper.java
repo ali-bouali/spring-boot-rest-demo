@@ -10,7 +10,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class StudentMapper {
 
-  public Student toStudent(StudentRequest request) {
+  public Student toStudent(StudentCreateRequest request) {
+
+    return Student.builder()
+        .firstname(request.firstname())
+        .username(request.username())
+        .lastname(request.lastname())
+        .password(request.password())
+        .email(request.email())
+        .subjects(request.subjectIds().stream().map(id -> Subject.builder().id(id).build())
+            .collect(Collectors.toSet()))
+        .address(Address.builder().id(request.addressId()).build())
+        .build();
+  }
+
+  public Student toStudent(StudentUpdateRequest request) {
 
     return Student.builder()
         .id(request.id())
@@ -23,10 +37,7 @@ public class StudentMapper {
             .collect(Collectors.toSet()))
         .address(Address.builder().id(request.addressId()).build())
         .build();
-
-
   }
-
 
   public Student toStudent(StudentLightRequest request) {
 

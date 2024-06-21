@@ -1,15 +1,10 @@
 package org.alibou.demo.address;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -30,7 +25,7 @@ import org.alibou.demo.student.Student;
 @Table(name = "address", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"street", "city", "state", "country", "postalCode"})
 })
-public class Address  extends BaseEntity {
+public class Address extends BaseEntity {
 
 
   @Column(nullable = false)
