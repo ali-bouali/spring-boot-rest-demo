@@ -1,11 +1,11 @@
-package org.alibou.demo.content;
+package org.alibou.demo.chapter;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.alibou.demo.chapter.dto.ChapterCreateRequest;
+import org.alibou.demo.chapter.dto.ChapterResponse;
 import org.alibou.demo.common.ErrorDetails;
-import org.alibou.demo.content.dto.ContentCreateRequest;
-import org.alibou.demo.content.dto.ContentResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,25 +16,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("/contents")
+@RequestMapping("/chapters")
 @RequiredArgsConstructor
-public class ContentController {
+public class ChapterController {
 
-  private final ContentService service;
-  private final ContentRepository contentRepository;
+  private final ChapterService service;
+  private final ChapterRepository chapterRepository;
 
   @Operation(
-      summary = "Create a new content",
-      description = "Creates a new content based on the provided details.",
-      tags = {"Contents"},
+      summary = "Create a new chapter",
+      description = "Creates a new chapter based on the provided details.",
+      tags = {"Chapters"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "201",
-              description = "Content created successfully",
+              description = "Chapter created successfully",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ContentResponse.class)
+                  schema = @Schema(implementation = ChapterResponse.class)
               )
           ),
           @ApiResponse(
@@ -56,25 +56,25 @@ public class ContentController {
       }
   )
   @PostMapping
-  public ResponseEntity<ContentResponse> createContent(
-      @RequestBody @Valid ContentCreateRequest content
+  public ResponseEntity<ChapterResponse> createChapter(
+      @RequestBody @Valid ChapterCreateRequest chapter
   ) {
-    ContentResponse contentResponse = service.createContent(content);
-    return ResponseEntity.accepted().body(contentResponse);
+    ChapterResponse chapterResponse = service.createChapter(chapter);
+    return ResponseEntity.accepted().body(chapterResponse);
   }
 
   @Operation(
-      summary = "Update an existing content",
-      description = "Updates the details of an existing content based on the provided details.",
-      tags = {"Contents"},
+      summary = "Update an existing chapter",
+      description = "Updates the details of an existing chapter based on the provided details.",
+      tags = {"Chapters"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "200",
-              description = "Content updated successfully",
+              description = "Chapter updated successfully",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ContentResponse.class)
+                  schema = @Schema(implementation = ChapterResponse.class)
               )
           ),
           @ApiResponse(
@@ -87,7 +87,7 @@ public class ContentController {
           ),
           @ApiResponse(
               responseCode = "404",
-              description = "Content not found",
+              description = "Chapter not found",
               content = @Content(
                   mediaType = "application/json",
                   schema = @Schema(implementation = ErrorDetails.class)
@@ -104,32 +104,32 @@ public class ContentController {
       }
   )
   @PutMapping("/{id}")
-  public ResponseEntity<ContentResponse> updateContent(@PathVariable("id") Integer id,
-      @RequestBody @Valid ContentCreateRequest content
+  public ResponseEntity<ChapterResponse> updateChapter(@PathVariable("id") Integer id,
+      @RequestBody @Valid ChapterCreateRequest chapter
   ) {
-    contentRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("The content is not found with id " + id));
-    ContentResponse contentResponse = service.createContent(content);
-    return ResponseEntity.accepted().body(contentResponse);
+    chapterRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("The chapter is not found with id " + id));
+    ChapterResponse chapterResponse = service.createChapter(chapter);
+    return ResponseEntity.accepted().body(chapterResponse);
   }
 
   @Operation(
-      summary = "Get a content by ID",
-      description = "Retrieves a content's details by their ID.",
-      tags = {"Contents"},
+      summary = "Get a chapter by ID",
+      description = "Retrieves a chapter's details by their ID.",
+      tags = {"Chapters"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "200",
-              description = "Content retrieved successfully",
+              description = "Chapter retrieved successfully",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ContentResponse.class)
+                  schema = @Schema(implementation = ChapterResponse.class)
               )
           ),
           @ApiResponse(
               responseCode = "404",
-              description = "Content not found",
+              description = "Chapter not found",
               content = @Content(
                   mediaType = "application/json",
                   schema = @Schema(implementation = ErrorDetails.class)
@@ -146,24 +146,24 @@ public class ContentController {
       }
   )
   @GetMapping("/{id}")
-  public ResponseEntity<ContentResponse> getContentById(@PathVariable Integer id) {
-    ContentResponse contentResponse = service.findById(id);
-    return ResponseEntity.ok(contentResponse);
+  public ResponseEntity<ChapterResponse> getChapterById(@PathVariable Integer id) {
+    ChapterResponse chapterResponse = service.findById(id);
+    return ResponseEntity.ok(chapterResponse);
   }
 
   @Operation(
-      summary = "Delete a content by ID",
-      description = "Deletes a content by their ID.",
-      tags = {"Contents"},
+      summary = "Delete a chapter by ID",
+      description = "Deletes a chapter by their ID.",
+      tags = {"Chapters"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "204",
-              description = "Content deleted successfully"
+              description = "Chapter deleted successfully"
           ),
           @ApiResponse(
               responseCode = "404",
-              description = "Content not found",
+              description = "Chapter not found",
               content = @Content(
                   mediaType = "application/json",
                   schema = @Schema(implementation = ErrorDetails.class)
@@ -180,8 +180,8 @@ public class ContentController {
       }
   )
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteContentById(@PathVariable Integer id) {
-    service.deleteContentById(id);
+  public ResponseEntity<Void> deleteChapterById(@PathVariable Integer id) {
+    service.deleteChapterById(id);
     return ResponseEntity.noContent().build();
   }
 }

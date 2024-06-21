@@ -1,11 +1,13 @@
-package org.alibou.demo.content;
+package org.alibou.demo.address;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.alibou.demo.address.dto.AddressCreateRequest;
+import org.alibou.demo.address.dto.AddressMapper;
+import org.alibou.demo.address.dto.AddressResponse;
+import org.alibou.demo.address.dto.AddressUpdateRequest;
 import org.alibou.demo.common.ErrorDetails;
-import org.alibou.demo.content.dto.ContentCreateRequest;
-import org.alibou.demo.content.dto.ContentResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,26 +17,27 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+@RequestMapping("/addresses")
 @RestController
-@RequestMapping("/contents")
-@RequiredArgsConstructor
-public class ContentController {
+@AllArgsConstructor
+public class AddressController {
 
-  private final ContentService service;
-  private final ContentRepository contentRepository;
+  private final AddressService addressService;
+  private final AddressRepository addressRepository;
+  private final AddressMapper addressMapper;
 
   @Operation(
-      summary = "Create a new content",
-      description = "Creates a new content based on the provided details.",
-      tags = {"Contents"},
+      summary = "Create a new address",
+      description = "Creates a new address based on the provided details.",
+      tags = {"Addresses"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "201",
-              description = "Content created successfully",
+              description = "Address created successfully",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ContentResponse.class)
+                  schema = @Schema(implementation = AddressResponse.class)
               )
           ),
           @ApiResponse(
@@ -56,25 +59,25 @@ public class ContentController {
       }
   )
   @PostMapping
-  public ResponseEntity<ContentResponse> createContent(
-      @RequestBody @Valid ContentCreateRequest content
+  public ResponseEntity<AddressResponse> createAddress(
+      @RequestBody @Valid AddressCreateRequest address
   ) {
-    ContentResponse contentResponse = service.createContent(content);
-    return ResponseEntity.accepted().body(contentResponse);
+    AddressResponse addressResponse = addressService.createAddress(address);
+    return ResponseEntity.accepted().body(addressResponse);
   }
 
   @Operation(
-      summary = "Update an existing content",
-      description = "Updates the details of an existing content based on the provided details.",
-      tags = {"Contents"},
+      summary = "Update an existing address",
+      description = "Updates the details of an existing address based on the provided details.",
+      tags = {"Addresses"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "200",
-              description = "Content updated successfully",
+              description = "Address updated successfully",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ContentResponse.class)
+                  schema = @Schema(implementation = AddressResponse.class)
               )
           ),
           @ApiResponse(
@@ -87,7 +90,7 @@ public class ContentController {
           ),
           @ApiResponse(
               responseCode = "404",
-              description = "Content not found",
+              description = "Address not found",
               content = @Content(
                   mediaType = "application/json",
                   schema = @Schema(implementation = ErrorDetails.class)
@@ -104,32 +107,32 @@ public class ContentController {
       }
   )
   @PutMapping("/{id}")
-  public ResponseEntity<ContentResponse> updateContent(@PathVariable("id") Integer id,
-      @RequestBody @Valid ContentCreateRequest content
+  public ResponseEntity<AddressResponse> updateAddress(@PathVariable("id") Integer id,
+      @RequestBody @Valid AddressUpdateRequest address
   ) {
-    contentRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("The content is not found with id " + id));
-    ContentResponse contentResponse = service.createContent(content);
-    return ResponseEntity.accepted().body(contentResponse);
+    addressRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("The address is not found with id " + id));
+    AddressResponse addressResponse = addressService.updateteAddress(address);
+    return ResponseEntity.accepted().body(addressResponse);
   }
 
   @Operation(
-      summary = "Get a content by ID",
-      description = "Retrieves a content's details by their ID.",
-      tags = {"Contents"},
+      summary = "Get an address by ID",
+      description = "Retrieves an address's details by their ID.",
+      tags = {"Addresses"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "200",
-              description = "Content retrieved successfully",
+              description = "Address retrieved successfully",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ContentResponse.class)
+                  schema = @Schema(implementation = AddressResponse.class)
               )
           ),
           @ApiResponse(
               responseCode = "404",
-              description = "Content not found",
+              description = "Address not found",
               content = @Content(
                   mediaType = "application/json",
                   schema = @Schema(implementation = ErrorDetails.class)
@@ -146,24 +149,25 @@ public class ContentController {
       }
   )
   @GetMapping("/{id}")
-  public ResponseEntity<ContentResponse> getContentById(@PathVariable Integer id) {
-    ContentResponse contentResponse = service.findById(id);
-    return ResponseEntity.ok(contentResponse);
+  public ResponseEntity<AddressResponse> getAddressById(@PathVariable Integer id) {
+    return addressRepository.findById(id)
+        .map(address -> ResponseEntity.ok(addressMapper.toAddressResponse(address)))
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @Operation(
-      summary = "Delete a content by ID",
-      description = "Deletes a content by their ID.",
-      tags = {"Contents"},
+      summary = "Delete an address by ID",
+      description = "Deletes an address by their ID.",
+      tags = {"Addresses"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
               responseCode = "204",
-              description = "Content deleted successfully"
+              description = "Address deleted successfully"
           ),
           @ApiResponse(
               responseCode = "404",
-              description = "Content not found",
+              description = "Address not found",
               content = @Content(
                   mediaType = "application/json",
                   schema = @Schema(implementation = ErrorDetails.class)
@@ -180,8 +184,8 @@ public class ContentController {
       }
   )
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteContentById(@PathVariable Integer id) {
-    service.deleteContentById(id);
+  public ResponseEntity<Void> deleteAddressById(@PathVariable Integer id) {
+    addressService.deleteAddressById(id);
     return ResponseEntity.noContent().build();
   }
 }

@@ -12,11 +12,13 @@ import org.alibou.demo.student.dto.StudentMapper;
 import org.alibou.demo.subject.Subject;
 import org.alibou.demo.subject.SubjectRepository;
 import org.alibou.demo.subject.dto.SubjectMapper;
+import org.springframework.stereotype.Service;
 
 @Setter
 @Getter
 @Builder
 @Data
+@Service
 public class ChapterMapper {
 
   private final SubjectRepository subjectRepository;

@@ -19,3 +19,6 @@ spring:
 server:
   servlet:
     context-path: /api/v1
+classroom:
+  openapi:
+    base-url: https://localhost:8080
