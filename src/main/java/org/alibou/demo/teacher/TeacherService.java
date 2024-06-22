@@ -33,7 +33,7 @@ public class TeacherService {
   private final SubjectMapper subjectMapper;
 
   @Transactional
-  public TeacherResponse createTeacher(TeacherCreateRequest request) {
+  public TeacherResponse registerTeacher(TeacherCreateRequest request) {
 
     return teacherMapper.toTeacherResponse(teacherRepository.save(teacherMapper.toTeacher(request)),
         subjectMapper);
@@ -53,17 +53,17 @@ public class TeacherService {
   }
 
 
-  public TeacherResponse createTeacherWithLessInformation(TeacherLightRequest request) {
+  public TeacherResponse registerTeacherWithLessInformation(TeacherLightRequest request) {
 
     return teacherMapper.toTeacherResponse(teacherRepository.save(teacherMapper.toTeacher(request)),
         subjectMapper);
   }
 
   public TeacherResponse findById(Integer id) {
-    TeacherResponse TeacherResponse = teacherRepository.findById(id)
+    TeacherResponse teacherResponse = teacherRepository.findById(id)
         .map(teacher -> teacherMapper.toTeacherResponse(teacher, subjectMapper))
         .orElseThrow(() -> new EntityNotFoundException("The teacher is not found with Id: " + id));
-    return TeacherResponse;
+    return teacherResponse;
 
 
   }

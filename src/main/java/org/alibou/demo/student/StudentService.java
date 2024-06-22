@@ -116,7 +116,7 @@ public class StudentService {
   }
 
   @Transactional
-  public StudentResponse createStudent(StudentCreateRequest request) {
+  public StudentResponse registerStudent(StudentCreateRequest request) {
     Boolean existuser = studentRepository.existsByEmailOrUsername(request.email(),
         request.username());
     System.out.println("\n la variable  ++++++++++++++++++++++ " + existuser);
@@ -192,7 +192,7 @@ public class StudentService {
   }
 
   @Transactional
-  public StudentResponse createStudentWithLessInformation(StudentLightRequest request) {
+  public StudentResponse registerStudentWithLessInformation(StudentLightRequest request) {
     Boolean existuser = studentRepository.existsByEmailOrUsername(request.getEmail(),
         request.getUsername());
     System.out.println("\n la variable  ++++++++++++++++++++++ " + existuser);

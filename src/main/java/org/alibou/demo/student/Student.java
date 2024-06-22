@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,8 @@ import org.alibou.demo.user.User;
 })
 @DiscriminatorValue("STUDENT")
 public class Student extends User {
-
+  private LocalDate dateOfBirth;
+  private String level;
   @OneToOne
   @JsonManagedReference
   private Address address;

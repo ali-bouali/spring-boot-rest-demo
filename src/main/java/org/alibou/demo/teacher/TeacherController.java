@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("/teachers")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class TeacherController {
 
@@ -27,7 +27,7 @@ public class TeacherController {
   @Operation(
       summary = "Create a new teacher",
       description = "Creates a new teacher based on the provided details.",
-      tags = {"Teachers"},
+      tags = {"Register"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -56,11 +56,11 @@ public class TeacherController {
           )
       }
   )
-  @PostMapping
-  public ResponseEntity<TeacherResponse> createTeacher(
+  @PostMapping("/teachers/register")
+  public ResponseEntity<TeacherResponse> registerteTeacher(
       @RequestBody @Valid TeacherCreateRequest teacher
   ) {
-    TeacherResponse teacherResponse = service.createTeacher(teacher);
+    TeacherResponse teacherResponse = service.registerTeacher(teacher);
     return ResponseEntity.accepted().body(teacherResponse);
   }
 
@@ -104,7 +104,7 @@ public class TeacherController {
           )
       }
   )
-  @PutMapping("/{id}")
+  @PutMapping("/teachers/{id}")
   public ResponseEntity<TeacherResponse> updateTeacher(
       @PathVariable Integer id,
       @RequestBody @Valid TeacherUpdateRequest teacher
@@ -116,7 +116,7 @@ public class TeacherController {
   @Operation(
       summary = "Create a new teacher with less information",
       description = "Creates a new teacher with less information based on the provided details.",
-      tags = {"Teachers"},
+      tags = {"Register"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -145,11 +145,11 @@ public class TeacherController {
           )
       }
   )
-  @PostMapping("/special")
-  public ResponseEntity<TeacherResponse> createTeacherWithLessInformation(
+  @PostMapping("/teachers/special/register")
+  public ResponseEntity<TeacherResponse> registerTeacherWithLessInformation(
       @RequestBody TeacherLightRequest teacher
   ) {
-    TeacherResponse teacherResponse = service.createTeacherWithLessInformation(teacher);
+    TeacherResponse teacherResponse = service.registerTeacherWithLessInformation(teacher);
     return ResponseEntity.accepted().body(teacherResponse);
   }
 
@@ -185,7 +185,7 @@ public class TeacherController {
           )
       }
   )
-  @GetMapping("/{id}")
+  @GetMapping("/teachers/{id}")
   public ResponseEntity<TeacherResponse> getTeacherById(@PathVariable Integer id) {
     TeacherResponse teacherResponse = service.findById(id);
     return ResponseEntity.ok(teacherResponse);
@@ -219,7 +219,7 @@ public class TeacherController {
           )
       }
   )
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/teachers/{id}")
   public ResponseEntity<Void> deleteTeacherById(@PathVariable Integer id) {
     service.deleteTeacherById(id);
     return ResponseEntity.noContent().build();
@@ -257,7 +257,7 @@ public class TeacherController {
           )
       }
   )
-  @GetMapping("/search")
+  @GetMapping("/teachers/search")
   public Page<TeacherResponse> searchTeachers(
       @RequestParam(required = false) String firstname,
       @RequestParam(required = false) String lastname,

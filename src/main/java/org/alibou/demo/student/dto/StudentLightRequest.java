@@ -19,9 +19,8 @@ import lombok.Setter;
 public class StudentLightRequest {
 
   @Email(message = "Email should be valid")
-  @NotNull(message = "Email cannot be null")
   @NotEmpty(message = "Email cannot be empty")
-  String email;
+   String email;
   @NotEmpty(message = "username cannot be empty")
   private String username;
   @NotEmpty(message = "firstname cannot be empty")

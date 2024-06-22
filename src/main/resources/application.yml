@@ -16,9 +16,32 @@ spring:
 
   application:
     name: spring-boot-rest-demo
-server:
-  servlet:
-    context-path: /api/v1
+
+#server:
+#  servlet:
+#    context-path: /api/v1
+
 classroom:
   openapi:
-    base-url: https://localhost:8080
+    base-url: http://localhost:8080
+
+token:
+  secret:
+    key: 48a868a4042f634ac04a117f00a87202131dd7c46c4b32c4acb3edc5e15f4511
+  expirationms: 223600000
+
+logging:
+  level:
+    org.springframework.boot.web: DEBUG
+    org.apache.catalina.core: DEBUG
+
+springdoc:
+  swagger-ui:
+    filter: true
+    tagsSorter: alpha
+    enabled: true
+    operationsSorter: method
+    path: /api/docs/index.html
+  api-docs:
+    path: /v3/api-docs
+  use-yaml: true

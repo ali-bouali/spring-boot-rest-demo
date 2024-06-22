@@ -64,6 +64,23 @@
       <groupId>org.springframework.boot</groupId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <artifactId>jjwt-api</artifactId>
+      <groupId>io.jsonwebtoken</groupId>
+      <version>0.11.5</version> <!-- JJWT API for JSON Web Tokens -->
+    </dependency>
+    <dependency>
+      <artifactId>jjwt-impl</artifactId>
+      <groupId>io.jsonwebtoken</groupId>
+      <scope>runtime</scope>
+      <version>0.11.5</version> <!-- JJWT implementation for JSON Web Tokens -->
+    </dependency>
+    <dependency>
+      <artifactId>jjwt-jackson</artifactId>
+      <groupId>io.jsonwebtoken</groupId>
+      <scope>runtime</scope>
+      <version>0.11.5</version> <!-- JJWT Jackson integration -->
+    </dependency>
   </dependencies>
   <description>spring-boot-rest-demo</description>
   <groupId>org.alibou</groupId>

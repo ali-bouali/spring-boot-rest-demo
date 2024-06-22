@@ -25,9 +25,9 @@ import org.alibou.demo.user.User;
 @NoArgsConstructor
 @DiscriminatorValue("TEACHER")
 public class Teacher extends User {
+  private String speciality;
 
   @ManyToOne
-  // @JoinColumn(name = "subject_id")
   @JoinTable(
       name = "subscription",
       joinColumns = @JoinColumn(name = "user_id"),

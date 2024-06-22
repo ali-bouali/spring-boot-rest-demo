@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("/chapters")
+@RequestMapping("/api/v1/chapters")
 @RequiredArgsConstructor
 public class ChapterController {
 

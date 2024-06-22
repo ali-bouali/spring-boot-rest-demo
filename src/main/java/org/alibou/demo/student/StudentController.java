@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/v1/students")
 @RequiredArgsConstructor
 public class StudentController {
 
@@ -35,7 +35,7 @@ public class StudentController {
   @Operation(
       summary = "Create a new student",
       description = "Creates a new student based on the provided details.",
-      tags = {"Students"},
+      tags = {"Register"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -64,11 +64,11 @@ public class StudentController {
           )
       }
   )
-  @PostMapping
-  public ResponseEntity<StudentResponse> createStudent(
+  @PostMapping("/register")
+  public ResponseEntity<StudentResponse> registerStudent(
       @RequestBody @Valid StudentCreateRequest student
   ) {
-    StudentResponse studentResponse = service.createStudent(student);
+    StudentResponse studentResponse = service.registerStudent(student);
     return ResponseEntity.accepted().body(studentResponse);
   }
 
@@ -118,14 +118,14 @@ public class StudentController {
   ) {
     studentRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("The student is not found with id " + id));
-    StudentResponse studentResponse = service.createStudent(student);
+    StudentResponse studentResponse = service.registerStudent(student);
     return ResponseEntity.accepted().body(studentResponse);
   }
 
   @Operation(
       summary = "Create a new student with less information",
       description = "Creates a new student with less information based on the provided details.",
-      tags = {"Students"},
+      tags = {"Register"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -154,11 +154,11 @@ public class StudentController {
           )
       }
   )
-  @PostMapping("/special")
+  @PostMapping("/special/register")
   public ResponseEntity<StudentResponse> createStudentWithLessInformation(
       @RequestBody StudentLightRequest student
   ) {
-    StudentResponse resStudent = service.createStudentWithLessInformation(student);
+    StudentResponse resStudent = service.registerStudentWithLessInformation(student);
     return ResponseEntity.accepted().body(resStudent);
   }
 

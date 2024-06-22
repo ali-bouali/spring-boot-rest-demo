@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
-@RequestMapping("/addresses")
+@RequestMapping("/api/v1/addresses")
 @RestController
 @AllArgsConstructor
 public class AddressController {

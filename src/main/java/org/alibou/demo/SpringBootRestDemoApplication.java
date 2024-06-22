@@ -6,12 +6,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-//@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @SpringBootApplication
 public class SpringBootRestDemoApplication {
 
-  private final StudentRepository repo;  // Dependency declaration
+  private final StudentRepository repo;
   private final StudentService studentService;
 
   public SpringBootRestDemoApplication(StudentRepository repo, StudentService studentService) {

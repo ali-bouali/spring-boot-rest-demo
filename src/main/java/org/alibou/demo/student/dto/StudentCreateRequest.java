@@ -30,7 +30,9 @@ public record StudentCreateRequest(
     @NotNull(message = "Email cannot be null")
     @NotEmpty(message = "Email cannot be empty")
     String email,
-
+    @NotNull(message = "level cannot be null")
+    @NotEmpty(message = "level cannot be empty")
+    String level,
     Integer addressId,
     Set<Integer> subjectIds
 
