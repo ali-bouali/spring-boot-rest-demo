@@ -1,4 +1,4 @@
-package org.alibou.demo.filters;
+package org.alibou.demo.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -5,6 +5,7 @@ import org.alibou.demo.exception.BusinessException;
 import org.alibou.demo.exception.ExceptionType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -54,6 +55,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(exp.getMessage());
+    }
+
+    @ExceptionHandler({DisabledException.class})
+    public ResponseEntity<?> handleException(DisabledException exp) {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body("User account is disabled, please contact your admin.");
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})

@@ -1,13 +1,13 @@
 package org.alibou.demo.security;
 
 import lombok.RequiredArgsConstructor;
-import org.alibou.demo.filters.HttpRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,6 +23,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private  final HttpRequestFilter filter;
+    // private final AuthenticationProvider authProvider;
 
     // @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
@@ -60,8 +61,11 @@ public class SecurityConfig {
                             .anyRequest()
                                 .authenticated()
                 )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                // .httpBasic(Customizer.withDefaults())
+                // .authenticationProvider(authProvider) --> kima fasserna, l auth provider mech lazem n7ottouh manuellement 5ater Spring bech ya3ref w yal9a direct PasswordEncode bean wel UserServiceDetails bean
+
+
                 ;
 
         return http.build();
