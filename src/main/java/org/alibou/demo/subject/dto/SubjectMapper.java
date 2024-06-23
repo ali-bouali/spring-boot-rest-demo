@@ -43,8 +43,7 @@ public class SubjectMapper {
   public Subject toSubject(SubjectLightRequest request) {
 
     return Subject.builder()
-        .id(request.getId())
-        .name(request.getName())
+               .name(request.getName())
         .capacity(request.getCapacity())
         .description(request.getDescription())
         .build();
@@ -75,7 +74,7 @@ public class SubjectMapper {
 
     return SubjectLightRequest.builder()
 
-        .id(request.getId())
+       // .id(request.getId())
         .name(request.getName())
         .capacity(request.getCapacity())
         .description(request.getDescription())

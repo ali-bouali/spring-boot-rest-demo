@@ -15,7 +15,6 @@ public class ContentUpdateRequest {
   @NotEmpty(message = "content cannot be empty")
   private String content;
   @NotNull(message = "chapter cannot be null")
-  @NotEmpty(message = "chapter cannot be empty")
   private Chapter chapter;
 }
 

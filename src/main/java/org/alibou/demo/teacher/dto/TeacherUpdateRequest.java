@@ -29,6 +29,8 @@ public class TeacherUpdateRequest {
   @NotNull(message = "email cannot be null")
   @NotEmpty(message = "email cannot be empty")
   @Email(message = "Email should be valid")
-  private String email;
+  @NotNull(message = "username cannot be null")
+  @NotEmpty(message = "username cannot be empty")
+  private String username;  private String email;
 
 }

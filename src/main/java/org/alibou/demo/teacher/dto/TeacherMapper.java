@@ -3,6 +3,7 @@ package org.alibou.demo.teacher.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.alibou.demo.student.dto.StudentMapper;
 import org.alibou.demo.subject.Subject;
 import org.alibou.demo.subject.dto.SubjectMapper;
 import org.alibou.demo.teacher.Teacher;
@@ -12,11 +13,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class TeacherMapper {
   private final PasswordEncoder passwordEncoder;
+  private final  StudentMapper studentMapper;
   public Teacher toTeacher(TeacherCreateRequest request) {
 
     Teacher.TeacherBuilder teacherBuilder = Teacher.builder()
         .lastname(request.getLastname())
         .firstname(request.getFirstname())
+        .username(request.getUsername())
+
         .speciality(request.getSpeciality())
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
@@ -30,6 +34,8 @@ public class TeacherMapper {
     Teacher.TeacherBuilder teacherBuilder = Teacher.builder()
         .lastname(request.getLastname())
         .firstname(request.getFirstname())
+        .username(request.getUsername())
+
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
         .speciality(request.getSpeciality())
@@ -63,7 +69,7 @@ public class TeacherMapper {
         .email(request.getEmail())
         .firstname(request.getFirstname());
     if (request.getSubject() != null) {
-      responseBuilder.subject(mapper.toSubjectLightRequest(request.getSubject()))
+      responseBuilder.subject(mapper.toSubjectResponse(request.getSubject(),studentMapper))
       ;
 
     }

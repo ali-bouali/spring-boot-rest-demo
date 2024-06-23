@@ -1,5 +1,6 @@
 package org.alibou.demo.chapter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -35,6 +36,7 @@ public class Chapter extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "subject_id")
   private Subject subject;
+  @JsonIgnore
   @OneToMany(mappedBy = "chapter")
   private Set<Content> contents = new HashSet<>();
 }

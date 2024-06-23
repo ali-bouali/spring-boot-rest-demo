@@ -3,6 +3,8 @@ package org.alibou.demo.auth;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.alibou.demo.auth.dto.LoginRequest;
+import org.alibou.demo.auth.dto.LoginResponse;
 import org.alibou.demo.common.exception.UnauthorizedException;
 import org.alibou.demo.common.security.JwtService;
 import org.alibou.demo.user.User;

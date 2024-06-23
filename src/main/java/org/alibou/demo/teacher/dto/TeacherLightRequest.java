@@ -27,4 +27,5 @@ public class TeacherLightRequest {
   @NotEmpty(message = "email cannot be empty")
   @Email(message = "Email should be valid")
   private String email;
+
 }

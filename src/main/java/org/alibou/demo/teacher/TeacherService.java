@@ -2,10 +2,13 @@ package org.alibou.demo.teacher;
 
 import static org.alibou.demo.teacher.TeacherSpecification.withLastname;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.alibou.demo.student.StudentRepository;
 import org.alibou.demo.student.dto.StudentMapper;
+import org.alibou.demo.subject.Subject;
 import org.alibou.demo.subject.SubjectRepository;
 import org.alibou.demo.subject.dto.SubjectMapper;
 import org.alibou.demo.teacher.dto.TeacherCreateRequest;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -31,30 +35,56 @@ public class TeacherService {
   private final StudentRepository studentRepository;
   private final SubjectRepository subjectRepository;
   private final SubjectMapper subjectMapper;
-
+  private <T> T findEntityById(JpaRepository<T, Integer> repository, Integer id, String entityName) {
+    return repository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(entityName + " Not Found with Id : " + id));
+  }
   @Transactional
   public TeacherResponse registerTeacher(TeacherCreateRequest request) {
+   Optional<Teacher> exist= teacherRepository.findByEmail(request.getEmail());
+     if(exist.isPresent())
+     {
+       throw new EntityExistsException("a user already exists with this mail " + request.getEmail());
 
-    return teacherMapper.toTeacherResponse(teacherRepository.save(teacherMapper.toTeacher(request)),
+     }
+    Subject subject = findEntityById(subjectRepository,request.getSubjectId(),"Subject ");
+    Teacher teacher  = teacherMapper.toTeacher(request) ;
+    teacher.setSubject(subject);
+    teacher= teacherRepository.save(teacher);
+    return teacherMapper.toTeacherResponse(teacher,
         subjectMapper);
 
   }
 
   @Transactional
   public TeacherResponse updateTeacher(TeacherUpdateRequest request) {
-    if (request.getId() != null) {
-      subjectRepository.findById(request.getSubjectId()).orElseThrow(
-          () -> new EntityNotFoundException("Subjectis not found :" + (request.getSubjectId())));
-    }
 
-    return teacherMapper.toTeacherResponse(teacherRepository.save(teacherMapper.toTeacher(request)),
+    Optional<Teacher> exist= teacherRepository.findByEmailAndIdNot(request.getEmail(),
+        request.getId());
+    if(exist.isPresent())
+    {
+      throw new EntityExistsException("a user already exists with this mail " + request.getEmail());
+
+    }
+    Teacher teacher  = teacherMapper.toTeacher(request) ;
+    if (request.getId() != null) {
+      Subject subject = findEntityById(subjectRepository,request.getSubjectId(),"Subject ");
+      teacher.setSubject(subject);
+    }
+       teacher= teacherRepository.save(teacher);
+    return teacherMapper.toTeacherResponse(teacher,
         subjectMapper);
 
   }
 
 
   public TeacherResponse registerTeacherWithLessInformation(TeacherLightRequest request) {
+    Optional<Teacher> exist= teacherRepository.findByEmail(request.getEmail());
+    if(exist.isPresent())
+    {
+      throw new EntityExistsException("a user already exists with this mail " + request.getEmail());
 
+    }
     return teacherMapper.toTeacherResponse(teacherRepository.save(teacherMapper.toTeacher(request)),
         subjectMapper);
   }

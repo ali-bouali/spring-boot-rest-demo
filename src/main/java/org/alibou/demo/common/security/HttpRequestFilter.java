@@ -30,7 +30,7 @@ public class HttpRequestFilter  extends OncePerRequestFilter {
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
     String adminLoginPath = "/api/v1/admin/login";
-    String userLoginPath = "/api/v1/login";
+    String userLoginPath = "/api/v1/auth/login";
     String path = request.getRequestURI();
     return path.equals(adminLoginPath) || path.equals(userLoginPath);
   }

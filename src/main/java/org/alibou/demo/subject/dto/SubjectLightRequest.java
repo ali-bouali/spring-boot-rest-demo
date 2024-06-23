@@ -12,8 +12,7 @@ import lombok.Setter;
 public class SubjectLightRequest {
 
 
-  private Integer id;
-  @NotNull(message = "name cannot be null")
+   @NotNull(message = "name cannot be null")
   @NotEmpty(message = "name cannot be empty")
   private String name;
   @NotNull(message = "capacity cannot be null")

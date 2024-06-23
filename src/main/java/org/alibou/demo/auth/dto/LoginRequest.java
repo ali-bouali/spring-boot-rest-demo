@@ -1,4 +1,4 @@
-package org.alibou.demo.auth;
+package org.alibou.demo.auth.dto;
 
 
 public record LoginRequest(

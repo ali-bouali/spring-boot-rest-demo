@@ -35,7 +35,7 @@ public class StudentController {
   @Operation(
       summary = "Create a new student",
       description = "Creates a new student based on the provided details.",
-      tags = {"Register"},
+      tags = {"Users"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -125,7 +125,7 @@ public class StudentController {
   @Operation(
       summary = "Create a new student with less information",
       description = "Creates a new student with less information based on the provided details.",
-      tags = {"Register"},
+      tags = {"Users"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -203,7 +203,7 @@ public class StudentController {
   @Operation(
       summary = "Delete a student by ID",
       description = "Deletes a student by their ID.",
-      tags = {"Students"},
+      tags = {"Student Management"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -237,7 +237,7 @@ public class StudentController {
   @Operation(
       summary = "Search for students",
       description = "Search for students based on the provided criteria.",
-      tags = {"Students"},
+      tags = {"Student Management"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(

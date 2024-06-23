@@ -150,6 +150,8 @@ public class AddressController {
   )
   @GetMapping("/{id}")
   public ResponseEntity<AddressResponse> getAddressById(@PathVariable Integer id) {
+    System.out.println("\n ooooooooooooooooooooooooooooooooooo");
+
     return addressRepository.findById(id)
         .map(address -> ResponseEntity.ok(addressMapper.toAddressResponse(address)))
         .orElseGet(() -> ResponseEntity.notFound().build());

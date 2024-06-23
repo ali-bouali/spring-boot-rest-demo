@@ -17,10 +17,6 @@ public class ChapterUpdateRequest {
   @NotNull(message = "title cannot be null")
   @NotEmpty(message = "title cannot be empty")
   private String title;
-  @NotNull(message = "subject cannot be null")
-  @NotEmpty(message = "subject cannot be empty")
+  @NotNull(message = "ID cannot be null")
   private Integer subject;
-  @NotNull(message = "contents cannot be null")
-  @NotEmpty(message = "contents cannot be empty")
-  private Set<Integer> contents = new HashSet<>();
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.alibou.demo.subject.dto.SubjectLightRequest;
+import org.alibou.demo.subject.dto.SubjectResponse;
 
 @Setter
 @Getter
@@ -15,7 +16,7 @@ public class TeacherResponse {
   private Integer id;
   private String firstname;
   private String lastname;
-  private SubjectLightRequest subject;
+  private SubjectResponse subject;
   private String speciality;
   private String email;
 }

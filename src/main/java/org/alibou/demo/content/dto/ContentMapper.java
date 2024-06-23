@@ -12,10 +12,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class ContentMapper {
-  private final ChapterMapper chapterMapper ;
-  private final SubjectRepository subjectRepository;
-  private final SubjectMapper subjectMapper;
-  private final StudentMapper studentMapper;
 
   public Content toContent(ContentCreateRequest request) {
     Content.ContentBuilder contentBuilder =

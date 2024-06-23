@@ -27,7 +27,7 @@ public class TeacherController {
   @Operation(
       summary = "Create a new teacher",
       description = "Creates a new teacher based on the provided details.",
-      tags = {"Register"},
+      tags = {"Users"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -116,7 +116,7 @@ public class TeacherController {
   @Operation(
       summary = "Create a new teacher with less information",
       description = "Creates a new teacher with less information based on the provided details.",
-      tags = {"Register"},
+      tags = {"Users"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -156,7 +156,7 @@ public class TeacherController {
   @Operation(
       summary = "Get a teacher by ID",
       description = "Retrieves a teacher's details by their ID.",
-      tags = {"Teachers"},
+      tags = {"Teacher Management"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -194,7 +194,7 @@ public class TeacherController {
   @Operation(
       summary = "Delete a teacher by ID",
       description = "Deletes a teacher by their ID.",
-      tags = {"Teachers"},
+      tags = {"Teacher Management"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
@@ -228,7 +228,7 @@ public class TeacherController {
   @Operation(
       summary = "Search for teachers",
       description = "Search for teachers based on the provided criteria.",
-      tags = {"Teachers"},
+      tags = {"Teacher Management"},
       security = @SecurityRequirement(name = "WorkspaceUserSessionToken"),
       responses = {
           @ApiResponse(
