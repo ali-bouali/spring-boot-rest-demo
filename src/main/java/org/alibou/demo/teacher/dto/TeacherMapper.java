@@ -62,6 +62,7 @@ public class TeacherMapper {
 
 
   public TeacherResponse toTeacherResponse(Teacher request, SubjectMapper mapper) {
+    System.out.println("\n les subjects****************************" +request.getSubject());
     TeacherResponse.TeacherResponseBuilder responseBuilder = TeacherResponse.builder()
         .speciality(request.getSpeciality())
         .id(request.getId())

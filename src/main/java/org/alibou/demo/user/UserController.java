@@ -1,6 +1,7 @@
 package org.alibou.demo.user;
 
 
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,8 +10,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.alibou.demo.student.Student;
 import org.alibou.demo.student.dto.StudentMapper;
+import org.alibou.demo.subject.Subject;
 import org.alibou.demo.subject.dto.SubjectMapper;
 import org.alibou.demo.teacher.Teacher;
 import org.alibou.demo.teacher.dto.TeacherMapper;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Users", description = "Endpoints for managing users")
+@Slf4j
 public class UserController {
 
   private final StudentMapper studentMapper;
@@ -43,25 +47,46 @@ public class UserController {
   })
   @PutMapping("/{id}/enable")
   public ResponseEntity<?> updateUserEnableStatus(
-      @Parameter(description = "ID of the user to update", required = true)
-      @PathVariable Integer id,
-      @Parameter(description = "Enable status to set", required = true)
-      @RequestParam boolean enable) {
+      @Parameter(description = "ID of the user to update", required = true) @PathVariable Integer id,
+      @Parameter(description = "Enable status to set", required = true) @RequestParam boolean enable) {
 
     User usr = userRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("user not found with id : " + id));
-    usr.setEnabled(true);
-    userRepository.save(usr);
-    if (usr instanceof Student) {
-      return ResponseEntity.ok(studentMapper.toStudentResponse((Student) usr));
+        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
+    usr.setEnabled(enable);
+    User savedUser = userRepository.save(usr);
+    System.out.println("\n fffffffffffffffffffffffffUser type: " + savedUser);
+    System.out.println("User type: " + savedUser.getClass().getName());
+
+    if (savedUser instanceof Student) {
+      Student student =Student.builder()
+          .id(savedUser.getId())
+          .level(((Student) savedUser).getLevel())
+          .email(savedUser.getEmail())
+          .firstname(savedUser.getFirstname())
+          .lastname(savedUser.getLastname())
+          .username(savedUser.getUsername())
+         // .subjects(((Student) savedUser).getSubjects())
+          .dateOfBirth(((Student) savedUser).getDateOfBirth())
+          .build();
+      return ResponseEntity.ok(studentMapper.toStudentResponse(student));
+    } else if (savedUser instanceof Teacher) {
+      Subject sub =((Teacher) savedUser).getSubject();
+      System.out.println("\n ggggggggggggggggmppppppppppppp type: " + sub.getName());
+
+      Teacher teach =Teacher.builder()
+          .id(savedUser.getId())
+          .email(savedUser.getEmail())
+          .firstname(savedUser.getFirstname())
+          .lastname(savedUser.getLastname())
+          .username(savedUser.getUsername())
+          .speciality(((Teacher) savedUser).getSpeciality())
+          //.subject(sub)
+
+          .build();
+      return ResponseEntity.ok().body(teacherMapper.toTeacherResponse(teach, mapper));
+         } else {
+      throw new IllegalArgumentException("Unknown user type");
     }
-    {
-      Teacher teacher = (Teacher) usr;
-
-      return ResponseEntity.ok(teacherMapper.toTeacherResponse(teacher, mapper));
-    }
-
-
   }
 }
