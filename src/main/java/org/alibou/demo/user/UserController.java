@@ -47,7 +47,7 @@ public class UserController {
   })
   @PutMapping("/{id}/enable")
   public ResponseEntity<?> updateUserEnableStatus(
-      @Parameter(description = "ID of the user to update", required = true) @PathVariable Integer id,
+      @Parameter(description = "ID of the user to  update", required = true) @PathVariable Integer id,
       @Parameter(description = "Enable status to set", required = true) @RequestParam boolean enable) {
 
     User usr = userRepository.findById(id)
